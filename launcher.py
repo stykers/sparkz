@@ -7,7 +7,7 @@ try:
     from importlib.util import find_spec
 except ImportError:
     pass
-import  platform
+import platform
 import webbrowser
 import hashlib
 import argparse
@@ -105,7 +105,7 @@ def update_sparkz():
               'newest version.')
 
 
-def wipe_sparkz(reqs = False, data = False, cogs = False, reset_repo = False):
+def wipe_sparkz(reqs=False, data=False, plugins=False, revert_changes=False):
     if reqs:
         try:
             shutil.rmtree('lib')
@@ -115,3 +115,68 @@ def wipe_sparkz(reqs = False, data = False, cogs = False, reset_repo = False):
         except Exception:
             print('Something went wrong while wiping packages, please check permissions of lib/ or create an issue at '
                   'https://git.syskiller.io/Stykers/sparkz/issues if you think this is a bug.')
+
+    if data:
+        try:
+            shutil.rmtree('data')
+            print('Wiped config and data for this bot instance.')
+        except FileNotFoundError:
+            pass
+        except Exception:
+            print('Something went wrong while wiping packages, please check permissions of lib/ or create an issue at '
+                  'https://git.syskiller.io/Stykers/sparkz/issues if you think this is a bug.')
+
+    if plugins:
+        try:
+            shutil.rmtree("plugins")
+            print('Wiped all user plugins for this bot instance.')
+        except FileNotFoundError:
+            pass
+        except Exception:
+            print('Something went wrong while wiping packages, please check permissions of lib/ or create an issue at '
+                  'https://git.syskiller.io/Stykers/sparkz/issues if you think this is a bug.')
+
+    if revert_changes:
+        return_value = subprocess.call(('git', 'reset', '--hard'))
+
+        if return_value is 0:
+            print('Reverted all changes you have made.')
+        else:
+            print('Could not fix the code, you probably broke something, please backup data/ and plugin/ and manually '
+                  'download the official source.')
+
+
+def check_requirements():
+    sys.path_importer_cache = {}
+    if not find_spec('discord'):
+        return None
+    elif not find_spec('nacl'):
+        return None
+    else:
+        return True
+
+
+def check_git():
+    try:
+        subprocess.call(['git', '--version'], stdout=subprocess.DEVNULL,
+                        stdin=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL)
+    except FileNotFoundError:
+        return False
+    else:
+        return True
+
+
+def main_menu():
+    os.system('clear')
+    while True:
+        print('Sparkz - PreInitialization sequence')
+        print('Stuff you can do:')
+        print('1. Start sparkz')
+        print('2. Start sparkz with auto restart')
+        print('3. Install requirements')
+        print('4. Update pip')
+        print('5. Update sparkz')
+        print('6. Wipe sparkz')
+        print('7. Check requirements')
+        print('8. Check git')
