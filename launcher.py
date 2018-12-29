@@ -25,25 +25,31 @@ sys.path.insert(0, 'lib')
 
 def cli_args():
     parser = argparse.ArgumentParser(description='Sparkz - PreInitialization sequence')
-    parser.add_argument('--start', '-s',
+    parser.add_argument('start',
                         help='Add this parameter to start Sparkz directly.',
                         action='store_true')
-    parser.add_argument('--auto-restart', '-r',
+    parser.add_argument('auto-restart',
                         help='Add this parameter to make Sparkz automatically restart on crash.',
                         action='store_true')
-    parser.add_argument('--update', '--upgrade',
+    parser.add_argument('update',
                         help='Add this parameter to make the launcher update the bot to latest version.',
                         action='store_true')
-    parser.add_argument('--fix-req', '-f',
+    parser.add_argument('fix-req',
                         help='Add this parameter to make the bot install/fix the requirements')
-    parser.add_argument('--help', '-h',
+    parser.add_argument('help',
                         help='Prints help message.',
                         action='store_true')
-    parser.add_argument('--wipe-req',
+    parser.add_argument('wipe-req',
                         help='Add this parameter to wipe requirements for this sparkz instance.',
                         action='store_true')
-    parser.add_argument('--wipe-data',
-                        help='Add this parameter to wipe data for this sparkz instance',
+    parser.add_argument('wipe-data',
+                        help='Add this parameter to wipe data for this sparkz instance.',
+                        action='store_true')
+    parser.add_argument('wipe-plugins',
+                        help='Add this parameter to remove all plugins for this sparkz instance.',
+                        action='store_true')
+    parser.add_argument('revert-code',
+                        help='Add this parameter to revert all changes to the code for this sparkz instance.',
                         action='store_true')
     return parser.parse_args()
 
@@ -224,13 +230,21 @@ if __name__ == '__main__':
     directory = os.path.dirname(path)
     os.chdir(directory)
     check_env()
-    if args.start:
-        if args.auto-restart:
-            start_sparkz(restart=True)
-        else:
-            start_sparkz(restart=False)
-    elif args.update:
+    if args.update:
         update_pip()
         update_sparkz()
     elif args.fix-req:
         fix_req()
+    elif args.wipe-req:
+        wipe_sparkz(reqs=True)
+    elif args.wipe-data:
+        wipe_sparkz(data=True)
+    elif args.wipe-plugins:
+        wipe_sparkz(plugins=True)
+    elif args.revert-code:
+        wipe_sparkz(revert_changes=True)
+    elif args.start:
+        if args.auto-restart:
+            start_sparkz(restart=True)
+        else:
+            start_sparkz(restart=False)
