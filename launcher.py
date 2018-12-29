@@ -18,16 +18,9 @@ try:
     import pip
 except ImportError:
     pip = None
-
-if os.name is "nt":
-    print('This bot does not support Windows for now, please use Linux based operating systems.')
-    quit(1)
+from sys import platform
 
 sys.path.insert(0, 'lib')
-
-if sys.version_info < (3, 5):
-    print('This bot requires Python 3.5+, please upgrade your python installation.')
-    quit(1)
 
 
 def cli_args():
@@ -43,6 +36,15 @@ def cli_args():
                         action='store_true')
     parser.add_argument('--fix-req', '-f',
                         help='Add this parameter to make the bot install/fix the requirements')
+    parser.add_argument('--help', '-h',
+                        help='Prints help message.',
+                        action='store_true')
+    parser.add_argument('--wipe-req',
+                        help='Add this parameter to wipe requirements for this sparkz instance.',
+                        action='store_true')
+    parser.add_argument('--wipe-data',
+                        help='Add this parameter to wipe data for this sparkz instance',
+                        action='store_true')
     return parser.parse_args()
 
 
@@ -167,16 +169,68 @@ def check_git():
         return True
 
 
-def main_menu():
-    os.system('clear')
+def start_sparkz(restart):
+    interpreter = sys.executable
+
+    if interpreter is None:
+        raise RuntimeError("Python interpreter not found!")
+
+    if check_requirements() is None:
+        print('Requirements not installed, please do pip3 install -r requirements.txt')
+        exit(1)
+
+    command = (interpreter, 'sparkz.py')
+
     while True:
-        print('Sparkz - PreInitialization sequence')
-        print('Stuff you can do:')
-        print('1. Start sparkz')
-        print('2. Start sparkz with auto restart')
-        print('3. Install requirements')
-        print('4. Update pip')
-        print('5. Update sparkz')
-        print('6. Wipe sparkz')
-        print('7. Check requirements')
-        print('8. Check git')
+        try:
+            return_value = subprocess.call(command)
+        except KeyboardInterrupt:
+            return_value = 0
+            if return_value is 0:
+                break
+        else:
+            if return_value is 0:
+                break
+            elif return_value is 26:
+                print('Restarting due to crash!')
+                continue
+            else:
+                if not restart:
+                    break
+
+
+def check_env():
+    if check_git() is False:
+        print('Git is not installed, please install it via a native package manager or download it from'
+              'https://git-scm.org/')
+        exit(1)
+    if os.path.isdir('.git') is False:
+        print('This is not a git repository! Please clone the repository instead of downloading the archive!')
+        exit(1)
+    if platform != 'linux' or 'linux2':
+        print('This bot does not support your operating system for now, please use Linux based operating systems.')
+        quit(1)
+    if sys.version_info < (3, 5):
+        print('This bot requires Python 3.5+, please upgrade your python installation.')
+        quit(1)
+    if pip is None:
+        print('Please install pip to make this bot work.')
+
+
+args = cli_args()
+
+if __name__ == '__main__':
+    path = os.path.abspath(__file__)
+    directory = os.path.dirname(path)
+    os.chdir(directory)
+    check_env()
+    if args.start:
+        if args.auto-restart:
+            start_sparkz(restart=True)
+        else:
+            start_sparkz(restart=False)
+    elif args.update:
+        update_pip()
+        update_sparkz()
+    elif args.fix-req:
+        fix_req()
