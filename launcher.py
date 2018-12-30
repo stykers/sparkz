@@ -18,7 +18,6 @@ try:
     import pip
 except ImportError:
     pip = None
-from sys import platform
 
 sys.path.insert(0, 'lib')
 
@@ -213,7 +212,7 @@ def check_env():
     if os.path.isdir('.git') is False:
         print('This is not a git repository! Please clone the repository instead of downloading the archive!')
         exit(1)
-    if platform != 'linux' or 'linux2':
+    if not os.path.isdir('/proc'):
         print('This bot does not support your operating system for now, please use Linux based operating systems.')
         quit(1)
     if sys.version_info < (3, 5):
