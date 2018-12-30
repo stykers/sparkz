@@ -35,9 +35,6 @@ def cli_args():
                         action='store_true')
     parser.add_argument('fix-req',
                         help='Add this parameter to make the bot install/fix the requirements')
-    parser.add_argument('help',
-                        help='Prints help message.',
-                        action='store_true')
     parser.add_argument('wipe-req',
                         help='Add this parameter to wipe requirements for this sparkz instance.',
                         action='store_true')
@@ -100,7 +97,7 @@ def update_pip():
 
 def update_sparkz():
     try:
-        return_value = subprocess.call(("git", "pull", "--ff-only"))
+        return_value = subprocess.call(("git", "pull"))
     except FileNotFoundError:
         print('\nGit is not installed or is not in $PATH, install git using a native package manager or download it '
               'from https://git-scm.com/')
