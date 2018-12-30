@@ -2,6 +2,7 @@ from __future__ import print_function
 import os
 import sys
 import subprocess
+
 try:
     import urllib.request
     from importlib.util import find_spec
@@ -14,6 +15,7 @@ import argparse
 import shutil
 import stat
 import time
+
 try:
     import pip
 except ImportError:
