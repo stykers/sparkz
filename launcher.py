@@ -24,27 +24,28 @@ sys.path.insert(0, 'lib')
 
 def cli_args():
     parser = argparse.ArgumentParser(description='Sparkz - PreInitialization sequence')
-    parser.add_argument('start',
+    parser.add_argument('--start',
                         help='Add this parameter to start Sparkz directly.',
                         action='store_true')
-    parser.add_argument('auto-restart',
+    parser.add_argument('--auto-restart',
                         help='Add this parameter to make Sparkz automatically restart on crash.',
                         action='store_true')
-    parser.add_argument('update',
+    parser.add_argument('--update',
                         help='Add this parameter to make the launcher update the bot to latest version.',
                         action='store_true')
-    parser.add_argument('fix-req',
-                        help='Add this parameter to make the bot install/fix the requirements')
-    parser.add_argument('wipe-req',
+    parser.add_argument('--fix-req',
+                        help='Add this parameter to make the bot install/fix the requirements',
+                        action='store_true')
+    parser.add_argument('--wipe-req',
                         help='Add this parameter to wipe requirements for this sparkz instance.',
                         action='store_true')
-    parser.add_argument('wipe-data',
+    parser.add_argument('--wipe-data',
                         help='Add this parameter to wipe data for this sparkz instance.',
                         action='store_true')
-    parser.add_argument('wipe-plugins',
+    parser.add_argument('--wipe-plugins',
                         help='Add this parameter to remove all plugins for this sparkz instance.',
                         action='store_true')
-    parser.add_argument('revert-code',
+    parser.add_argument('--revert-code',
                         help='Add this parameter to revert all changes to the code for this sparkz instance.',
                         action='store_true')
     return parser.parse_args()
@@ -178,7 +179,7 @@ def start_sparkz(restart):
         raise RuntimeError("Python interpreter not found!")
 
     if check_requirements() is None:
-        print('Requirements not installed, please do pip3 install -r requirements.txt')
+        print('Requirements not installed, please do python3 -m launcher --fix-req')
         exit(1)
 
     command = (interpreter, 'sparkz.py')
@@ -226,21 +227,23 @@ if __name__ == '__main__':
     directory = os.path.dirname(path)
     os.chdir(directory)
     check_env()
-    if args.update:
+    if args.update is True:
         update_pip()
         update_sparkz()
-    elif args.fix-req:
+    elif args.fix_req is True:
         fix_req()
-    elif args.wipe-req:
+    elif args.wipe_req is True:
         wipe_sparkz(reqs=True)
-    elif args.wipe-data:
+    elif args.wipe_data is True:
         wipe_sparkz(data=True)
-    elif args.wipe-plugins:
+    elif args.wipe_plugins is True:
         wipe_sparkz(plugins=True)
-    elif args.revert-code:
+    elif args.revert_code is True:
         wipe_sparkz(revert_changes=True)
-    elif args.start:
-        if args.auto-restart:
+    elif args.start is True:
+        if args.auto_restart is True:
             start_sparkz(restart=True)
         else:
             start_sparkz(restart=False)
+    else:
+        args.print_help()
