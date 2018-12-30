@@ -21,8 +21,10 @@ except ImportError:
 
 sys.path.insert(0, 'lib')
 
+trash = open(os.devnull, 'w')
 
-def cli_args():
+
+def cli_args(print_help=False):
     parser = argparse.ArgumentParser(description='Sparkz - PreInitialization sequence')
     parser.add_argument('--start',
                         help='Add this parameter to start Sparkz directly.',
@@ -48,6 +50,9 @@ def cli_args():
     parser.add_argument('--revert-code',
                         help='Add this parameter to revert all changes to the code for this sparkz instance.',
                         action='store_true')
+    if print_help:
+        parser.print_help()
+
     return parser.parse_args()
 
 
@@ -58,7 +63,7 @@ def fix_req():
         print('Error: No python interpreter found!')
         return
 
-    args = [
+    arguments = [
         interpreter, '-m',
         'pip', 'install',
         '--upgrade',
@@ -66,7 +71,7 @@ def fix_req():
         '-r', 'requirements.txt'
     ]
 
-    return_value = subprocess.call(args)
+    return_value = subprocess.call(arguments)
 
     if return_value is 0:
         print('\nRequirements are fixed.')
@@ -82,13 +87,13 @@ def update_pip():
         print('Error: No python interpreter found!')
         return
 
-    args = [
+    arguments = [
         interpreter, "-m",
         "pip", "install",
         "--upgrade", "pip"
     ]
 
-    return_value = subprocess.call(args)
+    return_value = subprocess.call(arguments)
 
     if return_value is 0:
         print('\nPip has been updated successfully.')
@@ -162,14 +167,11 @@ def check_requirements():
 
 
 def check_git():
-    try:
-        subprocess.call(['git', '--version'], stdout=subprocess.DEVNULL,
-                        stdin=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL)
-    except FileNotFoundError:
-        return False
-    else:
+    return_value = subprocess.call(('git', '--version'), stdout=trash, stderr=trash)
+    if return_value is 0:
         return True
+    else:
+        return False
 
 
 def start_sparkz(restart):
@@ -203,11 +205,11 @@ def start_sparkz(restart):
 
 
 def check_env():
-    if check_git() is False:
-        print('Git is not installed, please install it via a native package manager or download it from'
+    if not check_git():
+        print('Git is not installed, please install it via a native package manager or download it from '
               'https://git-scm.org/')
         exit(1)
-    if os.path.isdir('.git') is False:
+    if not os.path.isdir('.git'):
         print('This is not a git repository! Please clone the repository instead of downloading the archive!')
         exit(1)
     if not os.path.isdir('/proc'):
@@ -246,4 +248,4 @@ if __name__ == '__main__':
         else:
             start_sparkz(restart=False)
     else:
-        args.print_help()
+        cli_args(print_help=True)
