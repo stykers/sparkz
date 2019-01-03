@@ -180,7 +180,7 @@ def start_sparkz(restart):
     interpreter = sys.executable
 
     if interpreter is None:
-        raise RuntimeError("Python interpreter not found!")
+        raise RuntimeError('Python interpreter not found!')
 
     if check_requirements() is None:
         print('Requirements not installed, please do python3 -m launcher --fix-req')

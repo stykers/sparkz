@@ -44,19 +44,6 @@ class Configuration:
         if parse_args:
             self.parse_command_arguments(self=self)
 
-    try:
-        database = mysql.connector.connect(user=self.bot_config['database']['username'],
-                                           password=self.bot_config['database']['password'],
-                                           host=self.bot_config['database']['host'],
-                                           database=self.bot_config['database']['database'])
-    except mysql.connector.Error as error:
-        if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print('Please check your database credentials.')
-        elif error.errno == errorcode.ER_BAD_DB_ERROR:
-            print('Database does not exist, please create the database if this is the first run.')
-        else:
-            print(error)
-
     @staticmethod
     def parse_command_arguments(self):
         parser = argparse.ArgumentParser(description='Sparkz - A multi-function plugin based discord bot.')
