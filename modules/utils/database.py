@@ -16,6 +16,7 @@ class Database:
 
     @staticmethod
     def connect(username, password, database, host):
+        """Connects to MySQL database."""
         try:
             database = mysql.connector.connect(user=username,
                                                password=password,
