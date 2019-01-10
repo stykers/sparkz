@@ -30,18 +30,18 @@ class Configuration:
         }
         self._runtime_config = False
 
-        if not Writer.validate_json(self.path):
+        if not Writer.validate_json(modules.utils.writer.validate_json(), self.path):
             self.bot_config = deepcopy(self.default_config)
             self.save_config(self=self)
         else:
-            current = Writer.load_json(self.path)
+            current = Writer.load_json(modules.utils.writer.load_json(), self.path)
             if current.keys() is not self.default_config.keys():
                 for key in self.default_config.keys():
                     if key not in current.keys():
                         current[key] = self.default_config[key]
                         print('Added ' + str(key) + "to config.json as it was missing.")
-                Writer.write_json(self.path, current)
-            self.bot_config = Writer.load_json(self.path)
+                Writer.write_json(modules.utils.writer.write_json(), self.path, current)
+            self.bot_config = Writer.load_json(modules.utils.writer.load_json(), self.path)
 
         if parse_args:
             self.parse_command_arguments(self=self)
@@ -107,7 +107,7 @@ class Configuration:
     @staticmethod
     def save_config(self):
         if not self._safe_mode:
-            Writer.write_json(self.path, self.bot_config)
+            Writer.write_json(modules.utils.writer.write_json(), self.path, self.bot_config)
 
     @property
     def database(self):
