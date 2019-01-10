@@ -1,4 +1,4 @@
-from .writer import Writer
+from modules.utils.writer import Writer
 from copy import deepcopy
 import discord
 import os
@@ -19,6 +19,8 @@ class Configuration:
             'PASSWORD': None,
             'MASTER': None,
             'PREFIXES': ['s!', '/'],
+            'ADMIN': 'Administrator',
+            'MOD': 'Moderator',
             'database': {
                 'username': 'sparkz',
                 'password': 'password',
@@ -108,6 +110,10 @@ class Configuration:
             Writer.write_json(self.path, self.bot_config)
 
     @property
+    def database(self):
+        return self.bot_config
+
+    @property
     def master(self):
         return self.bot_config['MASTER']
 
@@ -153,33 +159,16 @@ class Configuration:
 
     @property
     def admin(self):
-        return self.bot_config['roles'].get('ADMIN', '')
+        return self.bot_config['ADMIN']
 
     @admin.setter
     def admin(self, value):
-        self.bot_config['roles']['ADMIN'] = value
+        self.bot_config['ADMIN'] = value
 
     @property
     def mod(self):
-        return self.bot_config['roles'].get('MOD', '')
+        return self.bot_config['MOD']
 
     @mod.setter
     def mod(self, value):
-        self.bot_config['roles']['MOD'] = value
-
-    @property
-    def guilds(self):
-        return_value = {}
-        guild_ids = list(
-            filter(lambda x: str(x).isdigit(), self.bot_config)
-        )
-        for guild in guild_ids:
-            return_value.update({guild: self.bot_config[guild]})
-        return return_value
-
-    def get_guild(self, guild):
-        if guild is None:
-            return self.bot_config['stuff'].copy()
-        assert isinstance(guild, discord.Server)
-        return self.bot_config.get(guild.id,
-                                   self.bot_config['stuff']).copy()
+        self.bot_config['MOD'] = value
