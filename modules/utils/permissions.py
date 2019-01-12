@@ -39,4 +39,38 @@ def role_or_perms(obj, check, **perms):
 
 def mod_or_perms(**perms):
     def kat(obj):
+        mod = obj.bot.configuration.mod.lower()
+        admin = obj.bot.configuration.admin.lower()
+        return role_or_perms(obj, lambda r: r.name.lower() in (mod, admin), **perms)
+    return commands.check(kat)
+
+
+def admin_or_perms(**perms):
+    def kat(obj):
+        admin = obj.bot.configuration.admin.lower()
+        return role_or_perms(obj, lambda r: r.name.lower() == admin.lower(), **perms)
+    return commands.check(kat)
+
+
+def gowner_or_perms(**perms):
+    def kat(obj):
+        if obj.message.server is None:
+            return False
         guild = obj.message.server
+        owner = guild.owner
+        if obj.message.author.id == owner.id:
+            return True
+        return check_perms(obj, perms)
+    return commands.check(kat)
+
+
+def gowner():
+    return gowner_or_perms()
+
+
+def admin():
+    return admin_or_perms()
+
+
+def mod():
+    return mod_or_perms()
