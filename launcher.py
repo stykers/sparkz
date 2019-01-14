@@ -198,7 +198,7 @@ def start_sparkz(restart):
         else:
             if return_value is 0:
                 break
-            elif return_value is 26:
+            elif return_value is 127:
                 print('Restarting due to crash!')
                 continue
             else:
