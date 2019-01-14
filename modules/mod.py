@@ -9,3 +9,80 @@ import os
 import re
 import logging
 import asyncio
+
+ACTIONS_REPR = {
+    'BAN': ('Ban', '\N{HAMMER}'),
+    'KICK': ('Kick', '\N{WOMANS BOOTS}'),
+    'MUTE': ('Channel Mute', '\N{SPEAKER WITH CENCELLATION STROKE}'),
+    'GMUTE': ('Global Mute', '\N{SPEAKER WITH CANCELLATION STROKE}'),
+    'SOFTBAN': ('Softban', '\N{DASH SYMBOL} \N{HAMMER}'),
+    'FORCEBAN': ('Preemptive ban', '\N{BUST IN SILHOUETTE} \N{HAMMER}'),
+    'UNBAN': ('Unban', '\N{DOVE OF PEACE}')
+}
+
+ACTION_CASES = {
+    'BAN': True,
+    'KICK': True,
+    'MUTE': False,
+    'GMUTE': True,
+    'SOFTBAN': True,
+    'FORCEBAN': True,
+    'UNBAN': True
+}
+
+default_config = {
+    'ban_tag_spam': False,
+    'delete_repeats': True,
+    'mod-log': None,
+    'respect_hierarchy': False
+}
+
+for act, enabled in ACTION_CASES.items():
+    act = act.lower() + '_cases'
+    default_config[act] = enabled
+
+
+class ModError(Exception):
+    pass
+
+
+class UnauthorizedCaseEdit(ModError):
+    pass
+
+
+class CaseNotFound(ModError):
+    pass
+
+
+class NoModLogChannel(ModError):
+    pass
+
+
+class TempCache:
+    """
+    This avoids events involving ban users from triggering twice in logs. It's bad but works.
+    """
+    def __init__(self, bot):
+        self.bot = bot
+        self._cache = []
+
+    def add(self, user, server, action, seconds=1):
+        tmp= (user.id, server.id, action)
+        self._cache.append(tmp)
+
+        async def delete_value():
+            await asyncio.sleep(seconds)
+            self._cache.remove(tmp)
+
+        self.bot.loop.create_task(delete_value())
+
+    def check(self, user, server, action):
+        return (user.id, server.id, action) in self._cache
+
+
+class Mod:
+    """Moderation tools"""
+
+    def __init__(self, bot):
+        self.bot = bot
+        self.ignore_list = Writer.load_json(modules.utils.writer.load_json(), 'data/ignorelist,json')
