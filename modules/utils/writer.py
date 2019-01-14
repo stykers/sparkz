@@ -78,4 +78,5 @@ def write_value(filename, key, value):
     return True
 
 
-jsonrw = Writer()._legacy_rw
+writer = Writer()
+jsonrw = writer._legacy_rw

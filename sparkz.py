@@ -11,7 +11,7 @@ import subprocess
 from discord.ext import commands
 import discord
 from modules.utils.configuration import Configuration
-from modules.utils.writer import Writer
+from modules.utils.writer import writer
 from modules.utils.formatting import code_single
 from collections import Counter
 from io import TextIOWrapper
@@ -21,6 +21,8 @@ intro = 'Sparkz - Discord bot'
 
 class Bot(commands.Bot):
     def __init__(self, *args, **kwargs):
+        # noinspection PyUnusedLocal
+        # TODO: add per server prefix
         def prefix(bot, message):
             """Returns the prefix of the bot."""
             return bot.configuration.prefixes()
@@ -36,7 +38,7 @@ class Bot(commands.Bot):
         self.oauth_url = ''
 
         try:
-            self._plugin_repo = Writer.load_json(modules.utils.writer.load_json(), 'data/repo.json')
+            self._plugin_repo = writer.load_json('data/repo.json')
         except Exception:
             self._plugin_repo = {}
 

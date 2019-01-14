@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from .utils.writer import Writer
+from .utils.writer import writer
 from .utils import permissions
 from datetime import datetime
 from collections import deque, defaultdict, OrderedDict
@@ -85,4 +85,9 @@ class Mod:
 
     def __init__(self, bot):
         self.bot = bot
-        self.ignore_list = Writer.load_json(modules.utils.writer.load_json(), 'data/ignorelist,json')
+        self.ignore_list = writer.load_json('data/ignorelist.json')
+        self.filter = writer.load_json('data/filter.json')
+        settings = writer.load_json('data/mod_settings.json')
+        self.settings = defaultdict(lambda: default_config.copy(), settings)
+        self.cache = OrderedDict()
+        self.cases = writer.load_json('data/modlog.json')
