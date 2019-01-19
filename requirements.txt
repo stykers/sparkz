@@ -1,3 +1,4 @@
+aiohttp
 mysql
 mysql-connector
 pip

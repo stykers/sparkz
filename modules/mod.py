@@ -62,12 +62,13 @@ class TempCache:
     """
     This avoids events involving ban users from triggering twice in logs. It's bad but works.
     """
+
     def __init__(self, bot):
         self.bot = bot
         self._cache = []
 
     def add(self, user, server, action, seconds=1):
-        tmp= (user.id, server.id, action)
+        tmp = (user.id, server.id, action)
         self._cache.append(tmp)
 
         async def delete_value():
@@ -91,3 +92,18 @@ class Mod:
         self.settings = defaultdict(lambda: default_config.copy(), settings)
         self.cache = OrderedDict()
         self.cases = writer.load_json('data/modlog.json')
+        self.last_case = defaultdict(dict, perms_cache)
+
+    @commands.group(pass_context=True, no_pm=True)
+    @permissions.gowner_or_perms(administrator=True)
+    async def modset(self, ctx):
+        """Manages administrator settings."""
+        if ctx.invoked_subcommand is None:
+            server = ctx.message.server
+            await self.bot.send_cmd_help(ctx)
+            roles = self.bot.configuration
+            msg = ('Admin role: {ADMIN_ROLE}\n'
+                   'Mod role: {MOD_ROLE}\n'
+                   'Mod-log: {mod-log}\n'
+                   'Delete repeats: {delete_repeats}\n'
+                   )

@@ -114,4 +114,4 @@ class Bot(commands.Bot):
             return self.configuration.self_bot
 
         mod_module = self.get_module('Mod')
-        global_ignores = self.get_module('Master')
+        global_ignores = self.get_module('Master').global_ignores
