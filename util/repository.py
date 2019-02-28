@@ -1,6 +1,6 @@
-from .essential import get
+from util import essential
 
-masters = get("config.json").masters
+masters = essential.get("config.json").masters
 
 
 def is_master(ctx):
