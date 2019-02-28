@@ -1,0 +1,11 @@
+{
+  "token": "INSERT_YOUR_TOKEN",
+  "owners": [
+    INSERT_YOUR_USERID
+  ],
+  "join_message": "Hi! I am here to help.",
+  "prefix": [
+    "s!"
+  ],
+  "playing": "Stykers"
+}
