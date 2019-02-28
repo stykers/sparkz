@@ -1,7 +1,3 @@
-A Python discord bot.
+move config,json.gen to config.json and fill in ur stuff.
 
-Based on plugins.
-
-Clone this repository and run launcher.py to get started.
-
-Only support Linux based systems at the moment.
+then run start.sh.
