@@ -19,3 +19,38 @@ def get(file):
 
 def timetext(name):
     return f"{name}_{int(time.time())}.txt"
+
+
+def timeago(target):
+    return timesince.format(target)
+
+
+def date(target, clock=True):
+    if clock is False:
+        return target.strftime("%d %B %Y")
+    return target.strftime("%d %B %Y, %H:%M")
+
+
+def actionmessage(case, mass=False):
+    output = f"Successfully performed **{case}** to the target."
+
+    if mass is True:
+        output = f"Successfully performed **{case}** to the targets."
+
+    return f"✅ {output}"
+
+
+async def formatoutput(ctx, filename: str = "Output", outputmsg: str = "Here is the data requested:", loop=None):
+    if not loop:
+        return await ctx.send("The output is empty :(")
+
+    formatted = "\r\n".join([f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)])
+
+    if len(loop) < 15:
+        return await ctx.send(f"{outputmsg}```ini\n{formatted}```")
+
+    data = BytesIO(formatted.encode('utf-8'))
+    await ctx.send(
+        content=outputmsg,
+        file=discord.File(data, filename=timetext(filename.title()))
+    )
