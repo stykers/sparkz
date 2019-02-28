@@ -34,8 +34,5 @@ def can_react(ctx):
     return isinstance(ctx.channel, discord.DMChannel) or ctx.channel.permissions_for(ctx.guild.me).add_reactions
 
 
-def is_nsfw(ctx, locale):
-    if locale is not "ja_JP":
+def is_nsfw(ctx):
         return isinstance(ctx.channel, discord.DMChannel) or ctx.channel.is_nsfw()
-    else:
-        return True
