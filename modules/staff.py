@@ -27,7 +27,13 @@ class Staff(commands.Cog):
     @commands.command()
     @commands.check(repository.is_master)
     async def reload(self, ctx, name: str):
-        """ Reloads specified module/plugin """
+        """ Reloads specified plugin """
+        try:
+            self.bot.unload_extension(f"plugins.{name}")
+            self.bot.load_extension(f"plugins.{name}")
+        except Exception as e:
+            return await ctx.send(f"```\n{e}```")
+        await ctx.send(f"**{name}** has been reloaded.")
 
 
 def setup(bot):
