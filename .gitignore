@@ -1,6 +1,5 @@
 .idea/
 lib/
-plugins/
 data/*.json
 venv/
 config.json
