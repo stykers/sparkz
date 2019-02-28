@@ -1,6 +1,6 @@
 {
   "token": "INSERT_YOUR_TOKEN",
-  "owners": [
+  "masters": [
     INSERT_YOUR_USERID
   ],
   "join_message": "Hi! I am here to help.",
