@@ -33,11 +33,11 @@ bot = Bot(
 for file in os.listdir("modules"):
     if file.endswith(".py"):
         name = file[:-3]
-        bot.load_extension(f"cogs.{name}")
+        bot.load_extension(f"modules.{name}")
 for file in os.listdir("plugins"):
     if file.endswith(".py"):
         name = file[:-3]
-        bot.load_extension(f"cogs.{name}")
-print("Connecting to discord...")
+        bot.load_extension(f"plugins.{name}")
+print("Contacting discord.")
 bot.run(config.token)
 print("Exiting!")
