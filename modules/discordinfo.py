@@ -19,6 +19,7 @@ class DiscordInfo(commands.Cog):
             user = ctx.author
 
         await ctx.send(f"Profile picture of **{user.name}**\n{user.avatar_url_as(size=1024)}")
+
     @pfp.error
     async def pfp_handler(self, ctx, error):
         if isinstance(error, commands.BadArgument):
