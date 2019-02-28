@@ -35,7 +35,7 @@ class Information(commands.Cog):
         ramusage = self.process.memory_full_info().rss / 1024**2
         avgmembers = round(len(self.bot.users) / len(self.bot.guilds))
 
-        embed = discord.Embed(colour=ctx.me.top_role.colour)
+        embed = discord.Embed(colour=discord.Color.dark_red())
         embed.set_thumbnail(url=ctx.bot.user.avatar_url)
         embed.add_field(
             name=f"Developer{'' if len(self.config.masters) == 1 else 's'}",
