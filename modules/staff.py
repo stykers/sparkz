@@ -132,6 +132,30 @@ class Staff(commands.Cog):
         except Exception as exception:
             await ctx.send(exception)
 
+    @config.command(name="idle")
+    @commands.check(repository.is_master)
+    async def idle(self, ctx):
+        """ Sets sparkz into idle mode. """
+        try:
+            await self.bot.change_presence(
+                status=discord.Status.idle
+            )
+            await ctx.send(f"I am now in idle mode.")
+        except Exception as exception:
+            await ctx.send(exception)
+
+    @config.command(name="online")
+    @commands.check(repository.is_master)
+    async def online(self, ctx):
+        """ Sets sparkz into online mode. """
+        try:
+            await self.bot.change_presence(
+                status=discord.Status.online
+            )
+            await ctx.send(f"I am now in online mode.")
+        except Exception as exception:
+            await ctx.send(exception)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
