@@ -98,12 +98,39 @@ class Staff(commands.Cog):
 
     @commands.group()
     @commands.check(repository.is_master)
-    async def change(self, ctx):
+    async def config(self, ctx):
         if ctx.invoked_subcommand is None:
             _help = await ctx.bot.formatter.format_help_for(ctx, ctx.command)
 
             for page in _help:
                 await ctx.send(page)
+
+    @config.command(name="play")
+    @commands.check(repository.is_master)
+    async def play(self, ctx, *, playing: str):
+        """ Makes the bot play something. """
+        try:
+            await self.bot.change_presence(
+                activity=discord.Game(type=0, name=playing)
+            )
+            writer.change_value("config.json", "playing", playing)
+            await ctx.send(f"I am now playing **{playing}**.")
+        except discord.InvalidArgument as exception:
+            await ctx.send(exception)
+        except Exception as e:
+            await ctx.send(e)
+
+    @config.command(name="dnd")
+    @commands.check(repository.is_master)
+    async def dnd(self, ctx):
+        """ Sets sparkz into DnD mode. """
+        try:
+            await self.bot.change_presence(
+                status=discord.Status.dnd
+            )
+            await ctx.send(f"I am now in DnD mode.")
+        except Exception as exception:
+            await ctx.send(exception)
 
 
 def setup(bot):
