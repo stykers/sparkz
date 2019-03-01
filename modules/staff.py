@@ -35,6 +35,14 @@ class Staff(commands.Cog):
             return await ctx.send(f"```\n{e}```")
         await ctx.send(f"**{name}** has been reloaded.")
 
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def restart(self, ctx):
+        """ Restarts sparkz. """
+        await ctx.send(f"I am restarting now :D")
+        time.sleep(1)
+        await self.bot.logout()
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
