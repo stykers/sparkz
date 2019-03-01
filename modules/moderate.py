@@ -26,3 +26,13 @@ class ActionReason(commands.Converter):
             reason_max = 512 - len(ret) - len(argument)
             raise commands.BadArgument(f'Exceeded max input length ({len(argument)}/{reason_max})')
         return ret
+
+
+class Moderate(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.config = essential.get("config.json")
+
+
+def setup(bot):
+    bot.add_cog(Moderate(bot))
