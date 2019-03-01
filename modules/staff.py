@@ -179,6 +179,28 @@ class Staff(commands.Cog):
         except Exception as err:
             await ctx.send(err)
 
+    @config.command(name="pfp")
+    @commands.check(repository.is_master)
+    async def pfp(self, ctx, *, url: str = None):
+        """ Sets the pfp of Sparkz. """
+        if url is None and len(ctx.message.attachments) == 1:
+            url = ctx.message.attachments[0].url
+        else:
+            url = url.strip('<>') if url else None
+
+        try:
+            bio = await http.get(url, res_method="read")
+            await self.bot.user.edit(avatar=bio)
+            await ctx.send(f"Applied the pfp:\n{url}")
+        except aiohttp.InvalidURL:
+            await ctx.send("Invalid URL.")
+        except discord.InvalidArgument:
+            await ctx.send("Invalid file content.")
+        except discord.HTTPException as err:
+            await ctx.send(err)
+        except TypeError as e:
+            await ctx.send(e)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
