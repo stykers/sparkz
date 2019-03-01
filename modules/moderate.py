@@ -44,6 +44,20 @@ class Moderate(commands.Cog):
         except Exception as exception:
             await ctx.send(exception)
 
+    @commands.command(aliases=["nick"])
+    @commands.guild_only()
+    @permissions.has_permissions(manage_nicknames=True)
+    async def nickname(self, ctx, member: discord.Member, *, name: str = None):
+        """ Sets nicknames for server members. """
+        try:
+            await member.edit(nick=name, reason=essential.responsible(ctx.author, "Configured by moderator."))
+            message = f"**{member.name}** is now nicked as **{name}**."
+            if name is None:
+                message = f"**{member.name}**'s nick has been reset."
+            await ctx.send(message)
+        except Exception as e:
+            await ctx.send(e)
+
 
 def setup(bot):
     bot.add_cog(Moderate(bot))
