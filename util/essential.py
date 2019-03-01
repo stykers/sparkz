@@ -31,6 +31,13 @@ def date(target, clock=True):
     return target.strftime("%d %B %Y, %H:%M")
 
 
+def responsible(target, reason):
+    response = f"[ {target} ]"
+    if reason is None:
+        return f"{response} did not specify a reason..."
+    return f"{response} {reason}"
+
+
 def actionmessage(case, mass=False):
     output = f"Successfully performed **{case}** to the target."
 

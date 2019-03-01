@@ -33,6 +33,17 @@ class Moderate(commands.Cog):
         self.bot = bot
         self.config = essential.get("config.json")
 
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(kick_members=True)
+    async def kick(self, ctx, member: discord.Member, *, reason: str = None):
+        """ Kicks a user from the guild/server. """
+        try:
+            await member.kick(reason=essential.responsible(ctx.author, reason))
+            await ctx.send(essential.actionmessage("kick"))
+        except Exception as exception:
+            await ctx.send(exception)
+
 
 def setup(bot):
     bot.add_cog(Moderate(bot))
