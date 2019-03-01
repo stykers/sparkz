@@ -156,6 +156,16 @@ class Staff(commands.Cog):
         except Exception as exception:
             await ctx.send(exception)
 
+    @config.command(name="username")
+    @commands.check(repository.is_master)
+    async def username(self, ctx, *, name: str):
+        """ Sets new username. """
+        try:
+            await self.bot.user.edit(username=name)
+            await ctx.send(f"I am now **{name}**")
+        except discord.HTTPException as err:
+            await ctx.send(err)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
