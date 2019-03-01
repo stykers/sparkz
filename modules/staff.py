@@ -64,6 +64,38 @@ class Staff(commands.Cog):
             return await ctx.send(f"```diff\n- {exception}```")
         await ctx.send(f"**{name}** has been unloaded.")
 
+    @commands.command(aliases=['exec', 'execute', 'sh', 'command'])
+    @commands.check(repository.is_master)
+    async def shell(self, ctx, *, text: str):
+        """ Pass a command to the command interpreter. """
+        message = await ctx.send(f"Please wait...")
+        proc = await asyncio.create_subprocess_shell(text, stdin=None, stderr=PIPE, stdout=PIPE)
+        out = (await proc.stdout.read()).decode('utf-8').strip()
+        err = (await proc.stderr.read()).decode('utf-8').strip()
+
+        if not out and not err:
+            await message.delete()
+            return await ctx.message.add_reaction('👌')
+
+        content = ""
+
+        if err:
+            content += f"Error:\r\n{err}\r\n{'-' * 30}\r\n"
+        if out:
+            content += out
+
+        if len(content) > 1500:
+            try:
+                data = BytesIO(content.encode('utf-8'))
+                await message.delete()
+                await ctx.send(content=f"Output exceeded output limit, so a log file is attached.",
+                               file=discord.File(data, filename=essential.timetext(f'Output')))
+            except asyncio.TimeoutError as e:
+                await message.delete()
+                return await ctx.send(e)
+        else:
+            await message.edit(content=f"```fix\n{content}\n```")
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
