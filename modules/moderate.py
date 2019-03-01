@@ -58,6 +58,69 @@ class Moderate(commands.Cog):
         except Exception as e:
             await ctx.send(e)
 
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(ban_members=True)
+    async def ban(self, ctx, member: MemberID, *, reason: str = None):
+        """ Bans users from the current server/guild. """
+        try:
+            await ctx.guild.ban(discord.Object(id=member), reason=essential.responsible(ctx.author, reason))
+            await ctx.send(essential.actionmessage("ban"))
+        except Exception as e:
+            await ctx.send(e)
+
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(ban_members=True)
+    async def unban(self, ctx, member: MemberID, *, reason: str = None):
+        """ Pardons users from current guild/server. """
+        try:
+            await ctx.guild.unban(discord.Object(id=member), reason=essential.responsible(ctx.author, reason))
+            await ctx.send(essential.actionmessage("unban"))
+        except Exception as e:
+            await ctx.send(e)
+
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member: discord.Member, *, reason: str = None):
+        """ Mutes users from current guild/server. """
+        message = []
+        for role in ctx.guild.roles:
+            if role.name == "Muted":
+                message.append(role.id)
+        try:
+            therole = discord.Object(id=message[0])
+        except IndexError as e:
+            await ctx.send(e)
+            return await ctx.send("Please create a role named **Muted**, case-sensitive.")
+
+        try:
+            await member.add_roles(therole, reason=essential.responsible(ctx.author, reason))
+            await ctx.send(essential.actionmessage("mute"))
+        except Exception as e:
+            await ctx.send(e)
+
+    @commands.command()
+    @commands.guild_only()
+    @permissions.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, member: discord.Member, *, reason: str = None):
+        """ Unutes users from current guild/server. """
+        message = []
+        for role in ctx.guild.roles:
+            if role.name == "Muted":
+                message.append(role.id)
+        try:
+            therole = discord.Object(id=message[0])
+        except IndexError:
+            return await ctx.send("Please create a role named **Muted**, case-sensitive.")
+
+        try:
+            await member.remove_roles(therole, reason=essential.responsible(ctx.author, reason))
+            await ctx.send(essential.actionmessage("unmute"))
+        except Exception as e:
+            await ctx.send(e)
+
 
 def setup(bot):
     bot.add_cog(Moderate(bot))
