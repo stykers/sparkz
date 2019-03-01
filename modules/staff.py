@@ -166,6 +166,19 @@ class Staff(commands.Cog):
         except discord.HTTPException as err:
             await ctx.send(err)
 
+    @config.command(name="nick")
+    @commands.check(repository.is_master)
+    async def nick(self, ctx, *, name: str = None):
+        """ Sets new nick name. """
+        try:
+            await ctx.guild.me.edit(nick=name)
+            if name:
+                await ctx.send(f"I am now nicked as **{name}**")
+            else:
+                await ctx.send("Nickname successfully reset.")
+        except Exception as err:
+            await ctx.send(err)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
