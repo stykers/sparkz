@@ -96,6 +96,15 @@ class Staff(commands.Cog):
         else:
             await message.edit(content=f"```fix\n{content}\n```")
 
+    @commands.group()
+    @commands.check(repository.is_master)
+    async def change(self, ctx):
+        if ctx.invoked_subcommand is None:
+            _help = await ctx.bot.formatter.format_help_for(ctx, ctx.command)
+
+            for page in _help:
+                await ctx.send(page)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
