@@ -9,6 +9,7 @@ from io import BytesIO
 from util import repository, essential, http, writer
 
 
+# noinspection PyBroadException
 class Staff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -42,6 +43,16 @@ class Staff(commands.Cog):
         await ctx.send(f"I am restarting now :D")
         time.sleep(1)
         await self.bot.logout()
+
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def load(self, ctx, name: str):
+        """ Loads a plugin that wasn't loaded on startup. """
+        try:
+            self.bot.load_extension(f"plugins.{name}")
+        except Exception as exception:
+            return await ctx.send(f"```diff\n- {exception}```")
+        await ctx.send(f"**{name}** has been loaded.")
 
 
 def setup(bot):
