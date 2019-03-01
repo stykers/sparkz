@@ -54,6 +54,16 @@ class Staff(commands.Cog):
             return await ctx.send(f"```diff\n- {exception}```")
         await ctx.send(f"**{name}** has been loaded.")
 
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def unload(self, ctx, name: str):
+        """ Unloads a plugin. Note that the plugin will still get loaded on startup if it's still on the disk. """
+        try:
+            self.bot.unload_extension(f"plugins.{name}")
+        except Exception as exception:
+            return await ctx.send(f"```diff\n- {exception}```")
+        await ctx.send(f"**{name}** has been unloaded.")
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
