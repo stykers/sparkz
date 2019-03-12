@@ -23,7 +23,8 @@ class Crypto(commands.Cog):
             help_cmd = self.bot.get_command('help')
             await ctx.invoke(help_cmd, 'decode')
 
-    async def encryptout(self, ctx, convert, input):
+    @staticmethod
+    async def encryptout(ctx, convert, input):
         if len(input) > 1900:
             # TODO: Upload if too long and accept text files
             return await ctx.send(f"Your result exceeded the maximum output limit, sorry **{ctx.author.name}**")
