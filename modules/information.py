@@ -43,7 +43,7 @@ class Information(commands.Cog):
             inline=True)
         embed.add_field(name="Library", value="discord.py", inline=True)
         embed.add_field(name="Servers", value=f"{len(ctx.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
-        embed.add_field(name="RAM", value=f"{ramusage:.2f} MB", inline=True)
+        embed.add_field(name="RAM", value=f"{ramusage:.2f} MiB", inline=True)
 
         await ctx.send(content=f"ℹ About **{ctx.bot.user}** | **{repository.version}**", embed=embed)
 
