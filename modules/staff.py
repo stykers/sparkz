@@ -40,7 +40,7 @@ class Staff(commands.Cog):
     @commands.check(repository.is_master)
     async def restart(self, ctx):
         """ Restarts sparkz. """
-        await ctx.send(f"I am restarting now :D")
+        await ctx.send(f"I am restarting <3")
         time.sleep(1)
         await self.bot.logout()
 
