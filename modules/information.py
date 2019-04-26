@@ -38,7 +38,7 @@ class Information(commands.Cog):
         embed = discord.Embed(colour=discord.Color.dark_red())
         embed.set_thumbnail(url=ctx.bot.user.avatar_url)
         embed.add_field(
-            name=f"Masters{'' if len(self.config.masters) == 1 else 's'}",
+            name=f"Master{'' if len(self.config.masters) == 1 else 's'}",
             value=', '.join([str(self.bot.get_user(x)) for x in self.config.masters]),
             inline=True)
         embed.add_field(name="Library", value="discord.py", inline=True)

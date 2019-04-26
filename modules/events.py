@@ -1,11 +1,15 @@
 import discord
+import discord.client
 import traceback
 import psutil
 import os
 
 from datetime import datetime
+from discord.user import User
 from discord.ext import commands
 from discord.ext.commands import errors
+
+
 from util import essential
 
 
@@ -35,9 +39,10 @@ class Events(commands.Cog):
 
             _traceback = traceback.format_tb(err.__traceback__)
             _traceback = ''.join(_traceback)
-            error = ('```py\n{2}{0}: {3}\n```').format(type(err).__name__, ctx.message.content, _traceback, err)
+            error = '```py\n{2}{0}: {3}\n```'.format(type(err).__name__, ctx.message.content, _traceback, err)
 
             await ctx.send(f"An error occurred while the server is interpreting your command.")
+            await self.bot.send_message([await self.bot.get_user_info(x) for x in self.config.masters])
 
 
 def setup(bot):
