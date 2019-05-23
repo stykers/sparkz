@@ -94,6 +94,27 @@ class Fun(commands.Cog):
             await ctx.send(f"Sending you a private message with your random generated password **{ctx.author.name}**")
         await ctx.author.send(f"🎁 **Here is your password:**\n{secrets.token_urlsafe(nbytes)}")
 
+    @commands.command()
+    async def rate(self, ctx, *, thing: commands.clean_content):
+        """ Rates what you desire """
+        num = random.randint(0, 100)
+        deci = random.randint(0, 9)
+
+        if num == 100:
+            deci = 0
+
+        await ctx.send(f"I'd rate {thing} a **{num}.{deci} / 100**")
+
+    @commands.command(aliases=['noticemesenpai'])
+    async def noticeme(self, ctx):
+        """ Notice me senpai! owo """
+        if not permissions.can_upload(ctx):
+            return await ctx.send("I lack the permission to send images.")
+
+        with open("assets/noticeme.gif", "rb") as fin:
+            bio = BytesIO(fin.read())
+        await ctx.send(file=discord.File(bio, filename="noticeme.gif"))
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
