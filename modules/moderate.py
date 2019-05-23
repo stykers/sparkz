@@ -121,6 +121,48 @@ class Moderate(commands.Cog):
         except Exception as e:
             await ctx.send(e)
 
+    @commands.group()
+    @commands.guild_only()
+    @permissions.has_permissions(ban_members=True)
+    async def search(self, ctx):
+        """ Search for a user that matches the search term. """
+        if ctx.invoked_subcommand is None:
+            _help = await ctx.bot.formatter.format_help_for(ctx, ctx.command)
+
+            for page in _help:
+                await ctx.send(page)
+
+    @search.command(name="playing")
+    async def search_playing(self, ctx, *, search: str):
+        loop = [f"{i} | {i.activity.name} ({i.id})" for i in ctx.guild.members if i.activity if (search.lower() in i.activity.name.lower()) and (not i.bot)]
+        await essential.formatoutput(
+            ctx, "playing", f"Found **{len(loop)}** on your search for **{search}**", loop
+        )
+
+    @search.command(name="username", aliases=["name"])
+    async def search_name(self, ctx, *, search: str):
+        loop = [f"{i} ({i.id})" for i in ctx.guild.members if search.lower() in i.name.lower() and not i.bot]
+        await essential.formatoutput(
+            ctx, "name", f"Found **{len(loop)}** on your search for **{search}**", loop
+        )
+
+    @search.command(name="nickname", aliases=["nick"])
+    async def search_nickname(self, ctx, *, search: str):
+        loop = [f"{i.nick} | {i} ({i.id})" for i in ctx.guild.members if i.nick if (search.lower() in i.nick.lower()) and not i.bot]
+        await essential.formatoutput(
+            ctx, "name", f"Found **{len(loop)}** on your search for **{search}**", loop
+        )
+
+    @search.command(name="discriminator", aliases=["discrim"])
+    async def search_discriminator(self, ctx, *, search: str):
+        if not len(search) is 4 or not re.compile("^[0-9]*$").search(search):
+            return await ctx.send("You must provide exactly 4 digits")
+
+        loop = [f"{i} ({i.id})" for i in ctx.guild.members if search == i.discriminator]
+        await essential.formatoutput(
+            ctx, "discriminator", f"Found **{len(loop)}** on your search for **{search}**", loop
+        )
+
 
 def setup(bot):
     bot.add_cog(Moderate(bot))
