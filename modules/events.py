@@ -43,8 +43,17 @@ class Events(commands.Cog):
 
             await ctx.send(f"An error occurred while the server is interpreting your command.")
             # await ctx.send(error)
-            if ctx.author in self.config.masters:
-                await ctx.send(error)
+            # if ctx.author in self.config.masters:
+            #    await ctx.send(error)
+
+        elif isinstance(err, errors.CheckFailure):
+            pass
+
+        elif isinstance(err, errors.CommandOnCooldown):
+            await ctx.send(f"This command is on cooldown, please try again in {err.retry_after:.2f} seconds.")
+
+        elif isinstance(err, errors.CommandNotFound):
+            await ctx.send(f"Command not found.")
 
 
 def setup(bot):
