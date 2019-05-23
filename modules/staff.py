@@ -57,7 +57,8 @@ class Staff(commands.Cog):
     @commands.command()
     @commands.check(repository.is_master)
     async def unload(self, ctx, name: str):
-        """ Unloads a plugin. Note that the plugin will still get loaded on startup if it's still on the disk. """
+        """ Unloads a plugin.
+        Note that the plugin will still get loaded on startup if it's still on the disk. """
         try:
             self.bot.unload_extension(f"plugins.{name}")
         except Exception as exception:
