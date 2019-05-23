@@ -12,6 +12,7 @@ from util import list, permissions, http, essential
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.session = aiohttp.ClientSession(loop=self.bot.loop)
 
     @commands.command(pass_context=True)
     async def hug(self, context, member: discord.Member):
@@ -58,6 +59,12 @@ class Fun(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.blue())
         embed.set_image(url=nekos['neko'])
         await ctx.send(embed=embed)
+
+    @commands.command(aliases=['8ball'])
+    async def eightball(self, ctx, *, question: commands.clean_content):
+        """ Consult 8ball to receive an answer """
+        answer = random.choice(list.ballresponse)
+        await ctx.send(f"🎱 **Question:** {question}\n**Answer:** {answer}")
 
 
 def setup(bot):
