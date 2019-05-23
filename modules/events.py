@@ -55,6 +55,25 @@ class Events(commands.Cog):
         elif isinstance(err, errors.CommandNotFound):
             await ctx.send(f"Command not found.")
 
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        if not self.config.join_message:
+            return
+
+        try:
+            to_send = sorted([chan for chan in guild.channels if chan.permissions_for(guild.me).send_messages and isinstance(chan, discord.TextChannel)], key=lambda x: x.position)[0]
+        except IndexError:
+            pass
+        else:
+            await to_send.send(self.config.join_message)
+
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        try:
+            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
 
 def setup(bot):
     bot.add_cog(Events(bot))
