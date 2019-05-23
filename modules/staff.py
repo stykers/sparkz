@@ -208,15 +208,15 @@ class Staff(commands.Cog):
         user = await self.bot.get_user_info(name)
         try:
             result = discord.Embed(colour=discord.Colour.blue())
-            result.title="The master has got a message for you."
+            result.title = "The master has got a message for you."
             result.add_field(name="Master: ", value=ctx.message.author, inline=False)
             result.add_field(name="Message:", value=msg, inline=False)
             result.set_thumbnail(url=ctx.message.author.avatar_url)
             await self.bot.send_message(user, embed=result)
         except:
-            await self.bot.say(f"Your message failed to deliver.")
+            await ctx.send(f"Your message failed to deliver.")
         else:
-            await self.bot.say(f"Message delivered.")
+            await ctx.send(f"Message delivered.")
 
 
 def setup(bot):
