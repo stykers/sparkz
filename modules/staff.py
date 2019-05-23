@@ -219,6 +219,11 @@ class Staff(commands.Cog):
         else:
             await ctx.send(f"Message delivered.")
 
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def exception(self, ctx):
+        ctx.send(1/0)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
