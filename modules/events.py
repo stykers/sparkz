@@ -42,7 +42,8 @@ class Events(commands.Cog):
             error = '```py\n{2}{0}: {3}\n```'.format(type(err).__name__, ctx.message.content, _traceback, err)
 
             await ctx.send(f"An error occurred while the server is interpreting your command.")
-            await self.bot.send_message([await self.bot.get_user_info(x) for x in self.config.masters])
+            await ctx.send(error)
+            # await self.bot.send_message([await self.bot.get_user_info(x) for x in self.config.masters])
 
 
 def setup(bot):
