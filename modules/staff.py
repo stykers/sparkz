@@ -212,9 +212,10 @@ class Staff(commands.Cog):
             result.add_field(name="Master: ", value=ctx.message.author, inline=False)
             result.add_field(name="Message:", value=msg, inline=False)
             result.set_thumbnail(url=ctx.message.author.avatar_url)
-            await self.bot.send_message(user, embed=result)
-        except:
+            await user.send('', embed=result)
+        except Exception as exception:
             await ctx.send(f"Your message failed to deliver.")
+            # await ctx.send(exception)
         else:
             await ctx.send(f"Message delivered.")
 
