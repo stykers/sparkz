@@ -51,6 +51,7 @@ class Fun(commands.Cog):
         await context.send(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, ctx):
         """Nekos! \\o/ Warning: Some lewd nekos exist :eyes:"""
         async with self.session.get("https://nekos.life/api/neko") as resp:
@@ -65,6 +66,20 @@ class Fun(commands.Cog):
         """ Consult 8ball to receive an answer """
         answer = random.choice(list.ballresponse)
         await ctx.send(f"🎱 **Question:** {question}\n**Answer:** {answer}")
+
+    @commands.command(aliases=['flip', 'coin'])
+    async def coinflip(self, ctx):
+        """ Coinflip! """
+        coinsides = ['Heads', 'Tails']
+        await ctx.send(f"**{ctx.author.name}** flipped a coin and got **{random.choice(coinsides)}**!")
+
+    @commands.command()
+    async def reverse(self, ctx, *, text: str):
+        """esreveR
+        Everything you type after reverse will of course, be reversed
+        """
+        t_rev = text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
+        await ctx.send(f"🔁 {t_rev}")
 
 
 def setup(bot):
