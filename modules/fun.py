@@ -53,7 +53,7 @@ class Fun(commands.Cog):
     @commands.command(pass_context=True, no_pm=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, ctx):
-        """Nekos! \\o/ Warning: Some lewd nekos exist :eyes:"""
+        """Nekos! \\o/ Warning: Some lewd nekos exist"""
         async with self.session.get("https://nekos.life/api/neko") as resp:
             nekos = await resp.json()
 
