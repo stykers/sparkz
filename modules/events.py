@@ -70,9 +70,17 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         try:
-            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+            print(f"{ctx.author}@{ctx.guild.name} > {ctx.message.clean_content}")
         except AttributeError:
             print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not hasattr(self.bot, 'uptime'):
+            self.bot.uptime = datetime.utcnow()
+
+        print(f'User: {self.bot.user} | Guilds: {len(self.bot.guilds)}')
+        await self.bot.change_presence(activity=discord.Game(type=0, name=self.config.playing), status=discord.Status.online)
 
 
 def setup(bot):
