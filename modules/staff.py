@@ -20,10 +20,12 @@ class Staff(commands.Cog):
     async def staff(self, ctx):
         """ Who am I? """
         if ctx.author.id in self.config.masters:
-            return await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
-        if ctx.author.id == 468703341816578059:
-            return await ctx.send(f"Also, you are my creator!")
-        await ctx.send(f"Nope, you ain't part of our staff team.")
+            if ctx.author.id == 468703341816578059:
+                await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
+                return await ctx.send(f"Also, you are my creator!")
+            else:
+                return await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
+        await ctx.send(f"Nooooooooooooooooo :(")
 
     @commands.command()
     @commands.check(repository.is_master)

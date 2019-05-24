@@ -41,9 +41,8 @@ class Events(commands.Cog):
             error = '```py\n{2}{0}: {3}\n```'.format(type(err).__name__, ctx.message.content, _traceback, err)
 
             await ctx.send(f"An error occurred while the server is interpreting your command.")
-            # await ctx.send(error)
-            # if ctx.author in self.config.masters:
-            #    await ctx.send(error)
+            if self.config.debug:
+                await ctx.send(error)
 
         elif isinstance(err, errors.CheckFailure):
             pass
