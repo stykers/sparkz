@@ -32,7 +32,7 @@ class Information(commands.Cog):
     @commands.command(aliases=['info', 'stats', 'status'])
     async def about(self, ctx):
         """ About the bot """
-        ramusage = self.process.memory_full_info().rss / 1024**2
+        ramusage = self.process.memory_full_info().rss / 1024 ** 2
         avgmembers = round(len(self.bot.users) / len(self.bot.guilds))
 
         embed = discord.Embed(colour=discord.Color.dark_red())
@@ -64,7 +64,8 @@ class Information(commands.Cog):
 
         embed.add_field(
             name="Roles",
-            value=', '.join([f"<@&{x.id}>" for x in user.roles if x is not ctx.guild.default_role]) if len(user.roles) > 1 else 'None',
+            value=', '.join([f"<@&{x.id}>" for x in user.roles if x is not ctx.guild.default_role]) if len(
+                user.roles) > 1 else 'None',
             inline=False
         )
 

@@ -134,7 +134,8 @@ class Moderate(commands.Cog):
 
     @search.command(name="playing")
     async def search_playing(self, ctx, *, search: str):
-        loop = [f"{i} | {i.activity.name} ({i.id})" for i in ctx.guild.members if i.activity if (search.lower() in i.activity.name.lower()) and (not i.bot)]
+        loop = [f"{i} | {i.activity.name} ({i.id})" for i in ctx.guild.members if i.activity if
+                (search.lower() in i.activity.name.lower()) and (not i.bot)]
         await essential.formatoutput(
             ctx, "playing", f"Found **{len(loop)}** on your search for **{search}**", loop
         )
@@ -148,7 +149,8 @@ class Moderate(commands.Cog):
 
     @search.command(name="nickname", aliases=["nick"])
     async def search_nickname(self, ctx, *, search: str):
-        loop = [f"{i.nick} | {i} ({i.id})" for i in ctx.guild.members if i.nick if (search.lower() in i.nick.lower()) and not i.bot]
+        loop = [f"{i.nick} | {i} ({i.id})" for i in ctx.guild.members if i.nick if
+                (search.lower() in i.nick.lower()) and not i.bot]
         await essential.formatoutput(
             ctx, "name", f"Found **{len(loop)}** on your search for **{search}**", loop
         )

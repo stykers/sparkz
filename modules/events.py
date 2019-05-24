@@ -9,11 +9,10 @@ from discord.user import User
 from discord.ext import commands
 from discord.ext.commands import errors
 
-
 from util import essential
 
 
-async def send_command_help (ctx):
+async def send_command_help(ctx):
     if ctx.invoked_subcommand:
         _help = await ctx.bot.formatter.format_help_for(ctx, ctx.invoked_subcommand)
     else:
@@ -61,7 +60,9 @@ class Events(commands.Cog):
             return
 
         try:
-            to_send = sorted([chan for chan in guild.channels if chan.permissions_for(guild.me).send_messages and isinstance(chan, discord.TextChannel)], key=lambda x: x.position)[0]
+            to_send = sorted([chan for chan in guild.channels if
+                              chan.permissions_for(guild.me).send_messages and isinstance(chan, discord.TextChannel)],
+                             key=lambda x: x.position)[0]
         except IndexError:
             pass
         else:
@@ -80,7 +81,8 @@ class Events(commands.Cog):
             self.bot.uptime = datetime.utcnow()
 
         print(f'User: {self.bot.user} | Guilds: {len(self.bot.guilds)}')
-        await self.bot.change_presence(activity=discord.Game(type=0, name=self.config.playing), status=discord.Status.online)
+        await self.bot.change_presence(activity=discord.Game(type=0, name=self.config.playing),
+                                       status=discord.Status.online)
 
 
 def setup(bot):

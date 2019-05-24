@@ -223,7 +223,7 @@ class Staff(commands.Cog):
     @commands.command()
     @commands.check(repository.is_master)
     async def exception(self, ctx):
-        ctx.send(1/0)
+        ctx.send(1 / 0)
 
 
 def setup(bot):
