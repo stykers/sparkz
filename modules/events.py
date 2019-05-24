@@ -5,7 +5,6 @@ import psutil
 import os
 
 from datetime import datetime
-from discord.user import User
 from discord.ext import commands
 from discord.ext.commands import errors
 
@@ -22,7 +21,8 @@ async def send_command_help(ctx):
         await ctx.send(page)
 
 
-class Events(commands.Cog):
+class Events(commands.Cog, command_attrs=dict(hidden=True)):
+    """Module to handle events."""
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")

@@ -5,6 +5,7 @@ from discord.ext import commands
 
 
 class Help(commands.Cog):
+    """The help module."""
     def __init__(self, bot):
         self.bot = bot
 

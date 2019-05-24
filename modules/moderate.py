@@ -29,6 +29,7 @@ class ActionReason(commands.Converter):
 
 
 class Moderate(commands.Cog):
+    """Utilities for moderators."""
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")

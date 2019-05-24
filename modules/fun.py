@@ -8,6 +8,7 @@ from util import list, permissions
 
 
 class Fun(commands.Cog):
+    """Utils and stuff."""
     def __init__(self, bot):
         self.bot = bot
 

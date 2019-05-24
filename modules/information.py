@@ -3,12 +3,12 @@ import discord
 import psutil
 import os
 
-from datetime import datetime
 from discord.ext import commands
 from util import repository, essential
 
 
 class Information(commands.Cog):
+    """Module that looks up information."""
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")
@@ -70,6 +70,20 @@ class Information(commands.Cog):
         )
 
         await ctx.send(content=f"ℹ About **{user.id}**", embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def pfp(self, ctx, *, user: discord.Member = None):
+        """ Get the pfp of you or someone else """
+        if user is None:
+            user = ctx.author
+
+        await ctx.send(f"Profile picture of **{user.name}**\n{user.avatar_url_as(size=1024)}")
+
+    @pfp.error
+    async def pfp_handler(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"That user does not exist!")
 
 
 def setup(bot):

@@ -6,6 +6,7 @@ from discord.ext import commands
 
 
 class Crypto(commands.Cog):
+    """Crypto related utilities."""
     def __init__(self, bot):
         self.bot = bot
 

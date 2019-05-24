@@ -11,6 +11,7 @@ from util import repository, essential, http, writer
 
 # noinspection PyBroadException
 class Staff(commands.Cog):
+    """Utilities for staff members."""
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")
