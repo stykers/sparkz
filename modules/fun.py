@@ -2,9 +2,8 @@ import random
 import discord
 import secrets
 
-from io import BytesIO
 from discord.ext import commands
-from util import list, permissions
+from util import list
 
 
 class Fun(commands.Cog):
@@ -55,16 +54,6 @@ class Fun(commands.Cog):
             deci = 0
 
         await context.send(f"I'd rate {thing} a **{num}.{deci} / 100**")
-
-    @commands.command(aliases=['noticemesenpai'])
-    async def noticeme(self, context):
-        """ Notice me senpai! owo """
-        if not permissions.can_upload(context):
-            return await context.send("I lack the permission to send images.")
-
-        with open("assets/noticeme.gif", "rb") as fin:
-            bio = BytesIO(fin.read())
-        await context.send(file=discord.File(bio, filename="noticeme.gif"))
 
     @commands.command(aliases=['slots', 'bet'])
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
