@@ -18,77 +18,77 @@ class Staff(commands.Cog):
         self._last_result = None
 
     @commands.command()
-    async def staff(self, ctx):
+    async def staff(self, context):
         """ Who am I? """
-        if ctx.author.id in self.config.masters:
-            if ctx.author.id == 468703341816578059:
-                await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
-                return await ctx.send(f"You are my creator <3 Thank you for everything!")
+        if context.author.id in self.config.masters:
+            if context.author.id == 468703341816578059:
+                await context.send(f"Sparkz at your service, master **{context.author.name}**.")
+                return await context.send(f"You are my creator <3 Thank you for everything!")
             else:
-                return await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
-        await ctx.send(f"Nooooooooooooooooo :( Please don't hurt me > <")
+                return await context.send(f"Sparkz at your service, master **{context.author.name}**.")
+        await context.send(f"Nooooooooooooooooo :( Please don't hurt me > <")
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def reload(self, ctx, name: str):
+    async def reload(self, context, name: str):
         """ Reloads specified plugin """
         try:
             self.bot.unload_extension(f"plugins.{name}")
             self.bot.load_extension(f"plugins.{name}")
         except Exception as e:
-            return await ctx.send(f"```\n{e}```")
-        await ctx.send(f"**{name}** has been reloaded.")
+            return await context.send(f"```\n{e}```")
+        await context.send(f"**{name}** has been reloaded.")
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def restart(self, ctx):
+    async def restart(self, context):
         """ Restarts sparkz. """
-        await ctx.send(f"I am restarting <3")
+        await context.send(f"I am restarting <3")
         # time.sleep(1)
         await self.bot.close()
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def shutdown(self, ctx):
+    async def shutdown(self, context):
         """ Shuts down sparkz. """
-        await ctx.send(f"I am shutting down =(")
+        await context.send(f"I am shutting down =(")
         # time.sleep(1)
         open("shutdown", 'a').close()
         await self.bot.close()
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def load(self, ctx, name: str):
+    async def load(self, context, name: str):
         """ Loads a plugin that wasn't loaded on startup. """
         try:
             self.bot.load_extension(f"plugins.{name}")
         except Exception as exception:
-            return await ctx.send(f"```diff\n- {exception}```")
-        await ctx.send(f"**{name}** has been loaded.")
+            return await context.send(f"```diff\n- {exception}```")
+        await context.send(f"**{name}** has been loaded.")
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def unload(self, ctx, name: str):
+    async def unload(self, context, name: str):
         """ Unloads a plugin.
         Note that the plugin will still get loaded on startup if it's still on the disk. """
         try:
             self.bot.unload_extension(f"plugins.{name}")
         except Exception as exception:
-            return await ctx.send(f"```diff\n- {exception}```")
-        await ctx.send(f"**{name}** has been unloaded.")
+            return await context.send(f"```diff\n- {exception}```")
+        await context.send(f"**{name}** has been unloaded.")
 
     @commands.command(aliases=['exec', 'execute', 'sh', 'command'])
     @commands.check(repository.is_master)
-    async def shell(self, ctx, *, text: str):
+    async def shell(self, context, *, text: str):
         """ Pass a command to the command interpreter. """
-        message = await ctx.send(f"Please wait...")
+        message = await context.send(f"Please wait...")
         proc = await asyncio.create_subprocess_shell(text, stdin=None, stderr=PIPE, stdout=PIPE)
         out = (await proc.stdout.read()).decode('utf-8').strip()
         err = (await proc.stderr.read()).decode('utf-8').strip()
 
         if not out and not err:
             await message.delete()
-            return await ctx.message.add_reaction('👌')
+            return await context.message.add_reaction('👌')
 
         content = ""
 
@@ -101,136 +101,136 @@ class Staff(commands.Cog):
             try:
                 data = BytesIO(content.encode('utf-8'))
                 await message.delete()
-                await ctx.send(content=f"Output exceeded output limit, so a log file is attached.",
+                await context.send(content=f"Output exceeded output limit, so a log file is attached.",
                                file=discord.File(data, filename=essential.timetext(f'Output')))
             except asyncio.TimeoutError as e:
                 await message.delete()
-                return await ctx.send(e)
+                return await context.send(e)
         else:
             await message.edit(content=f"```fix\n{content}\n```")
 
     @commands.group()
     @commands.check(repository.is_master)
-    async def config(self, ctx):
-        if ctx.invoked_subcommand is None:
-            _help = await ctx.bot.formatter.format_help_for(ctx, ctx.command)
+    async def config(self, context):
+        if context.invoked_subcommand is None:
+            _help = await context.bot.formatter.format_help_for(context, context.command)
 
             for page in _help:
-                await ctx.send(page)
+                await context.send(page)
 
     @config.command(name="play")
     @commands.check(repository.is_master)
-    async def play(self, ctx, *, playing: str):
+    async def play(self, context, *, playing: str):
         """ Makes the bot play something. """
         try:
             await self.bot.change_presence(
                 activity=discord.Game(type=0, name=playing)
             )
             writer.change_value("config.json", "playing", playing)
-            await ctx.send(f"I am now playing **{playing}**.")
+            await context.send(f"I am now playing **{playing}**.")
         except discord.InvalidArgument as exception:
-            await ctx.send(exception)
+            await context.send(exception)
         except Exception as e:
-            await ctx.send(e)
+            await context.send(e)
 
     @config.command(name="dnd")
     @commands.check(repository.is_master)
-    async def dnd(self, ctx):
+    async def dnd(self, context):
         """ Sets sparkz into DnD mode. """
         try:
             await self.bot.change_presence(
                 status=discord.Status.dnd
             )
-            await ctx.send(f"I am now in DnD mode.")
+            await context.send(f"I am now in DnD mode.")
         except Exception as exception:
-            await ctx.send(exception)
+            await context.send(exception)
 
     @config.command(name="idle")
     @commands.check(repository.is_master)
-    async def idle(self, ctx):
+    async def idle(self, context):
         """ Sets sparkz into idle mode. """
         try:
             await self.bot.change_presence(
                 status=discord.Status.idle
             )
-            await ctx.send(f"I am now in idle mode.")
+            await context.send(f"I am now in idle mode.")
         except Exception as exception:
-            await ctx.send(exception)
+            await context.send(exception)
 
     @config.command(name="online")
     @commands.check(repository.is_master)
-    async def online(self, ctx):
+    async def online(self, context):
         """ Sets sparkz into online mode. """
         try:
             await self.bot.change_presence(
                 status=discord.Status.online
             )
-            await ctx.send(f"I am now in online mode.")
+            await context.send(f"I am now in online mode.")
         except Exception as exception:
-            await ctx.send(exception)
+            await context.send(exception)
 
     @config.command(name="username")
     @commands.check(repository.is_master)
-    async def username(self, ctx, *, name: str):
+    async def username(self, context, *, name: str):
         """ Sets new username. """
         try:
             await self.bot.user.edit(username=name)
-            await ctx.send(f"I am now **{name}**")
+            await context.send(f"I am now **{name}**")
         except discord.HTTPException as err:
-            await ctx.send(err)
+            await context.send(err)
 
     @config.command(name="nick")
     @commands.check(repository.is_master)
-    async def nick(self, ctx, *, name: str = None):
+    async def nick(self, context, *, name: str = None):
         """ Sets new nick name. """
         try:
-            await ctx.guild.me.edit(nick=name)
+            await context.guild.me.edit(nick=name)
             if name:
-                await ctx.send(f"I am now nicked as **{name}**")
+                await context.send(f"I am now nicked as **{name}**")
             else:
-                await ctx.send("Nickname successfully reset.")
+                await context.send("Nickname successfully reset.")
         except Exception as err:
-            await ctx.send(err)
+            await context.send(err)
 
     @config.command(name="pfp")
     @commands.check(repository.is_master)
-    async def pfp(self, ctx, *, url: str = None):
+    async def pfp(self, context, *, url: str = None):
         """ Sets the pfp of Sparkz. """
-        if url is None and len(ctx.message.attachments) == 1:
-            url = ctx.message.attachments[0].url
+        if url is None and len(context.message.attachments) == 1:
+            url = context.message.attachments[0].url
         else:
             url = url.strip('<>') if url else None
 
         try:
             bio = await http.get(url, res_method="read")
             await self.bot.user.edit(avatar=bio)
-            await ctx.send(f"Applied the pfp:\n{url}")
+            await context.send(f"Applied the pfp:\n{url}")
         except aiohttp.InvalidURL:
-            await ctx.send("Invalid URL.")
+            await context.send("Invalid URL.")
         except discord.InvalidArgument:
-            await ctx.send("Invalid file content.")
+            await context.send("Invalid file content.")
         except discord.HTTPException as err:
-            await ctx.send(err)
+            await context.send(err)
         except TypeError as e:
-            await ctx.send(e)
+            await context.send(e)
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def tell(self, ctx, name: str, *, msg: str):
+    async def tell(self, context, name: str, *, msg: str):
         """ Sends a specified user a private message. """
         user = await self.bot.get_user_info(name)
         try:
             result = discord.Embed(colour=discord.Colour.blue())
             result.title = "The master has got a message for you."
-            result.add_field(name="Master: ", value=ctx.message.author, inline=False)
+            result.add_field(name="Master: ", value=context.message.author, inline=False)
             result.add_field(name="Message:", value=msg, inline=False)
-            result.set_thumbnail(url=ctx.message.author.avatar_url)
+            result.set_thumbnail(url=context.message.author.avatar_url)
             await user.send('', embed=result)
         except Exception as exception:
-            await ctx.send(f"Your message failed to deliver.")
-            # await ctx.send(exception)
+            await context.send(f"Your message failed to deliver.")
+            # await context.send(exception)
         else:
-            await ctx.send(f"Message delivered.")
+            await context.send(f"Message delivered.")
 
 
 def setup(bot):

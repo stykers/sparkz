@@ -21,7 +21,7 @@ async def send_command_help(ctx):
         await ctx.send(page)
 
 
-class Events(commands.Cog, command_attrs=dict(hidden=True)):
+class Events(commands.Cog):
     """Module to handle events."""
     def __init__(self, bot):
         self.bot = bot
@@ -82,6 +82,14 @@ class Events(commands.Cog, command_attrs=dict(hidden=True)):
         print(f'User: {self.bot.user} | Guilds: {len(self.bot.guilds)}')
         await self.bot.change_presence(activity=discord.Game(type=0, name=self.config.playing),
                                        status=discord.Status.online)
+
+    @commands.command()
+    async def debug(self, context):
+        """ Query if the bot is running in debug mode or not. """
+        if self.config.debug is True:
+            await context.send("I am running in Debug mode.")
+        else:
+            await context.send("I am running in Production mode.")
 
 
 def setup(bot):
