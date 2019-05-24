@@ -116,6 +116,34 @@ class Weeb(commands.Cog):
 
         await context.send(embed=embed)
 
+    @commands.command(pass_context=True)
+    async def fistbump(self, context, member: discord.Member):
+        """Give someone a fistbump =)"""
+        author = context.message.author.mention
+        mention = member.mention
+
+        hug = "**{0} gave {1} a fistbump!**"
+
+        choices = ['https://cdn.stykers.moe/img/fistbump/1.gif', 'https://cdn.stykers.moe/img/fistbump/2.gif',
+                   'https://cdn.stykers.moe/img/fistbump/3.gif', 'https://cdn.stykers.moe/img/fistbump/4.gif',
+                   'https://cdn.stykers.moe/img/fistbump/5.gif', 'https://cdn.stykers.moe/img/fistbump/6.gif',
+                   'https://cdn.stykers.moe/img/fistbump/7.gif', 'https://cdn.stykers.moe/img/fistbump/8.gif',
+                   'https://cdn.stykers.moe/img/fistbump/9.gif', 'https://cdn.stykers.moe/img/fistbump/10.gif',
+                   'https://cdn.stykers.moe/img/fistbump/11.gif', 'https://cdn.stykers.moe/img/fistbump/12.gif',
+                   'https://cdn.stykers.moe/img/fistbump/13.gif', 'https://cdn.stykers.moe/img/fistbump/14.gif',
+                   'https://cdn.stykers.moe/img/fistbump/15.gif', 'https://cdn.stykers.moe/img/fistbump/16.gif',
+                   'https://cdn.stykers.moe/img/fistbump/17.gif', 'https://cdn.stykers.moe/img/fistbump/18.gif',
+                   'https://cdn.stykers.moe/img/fistbump/19.gif', 'https://cdn.stykers.moe/img/fistbump/20.gif',
+                   'https://cdn.stykers.moe/img/fistbump/21.gif', 'https://cdn.stykers.moe/img/fistbump/22.gif',
+                   'https://cdn.stykers.moe/img/fistbump/23.gif']
+
+        image = random.choice(choices)
+
+        embed = discord.Embed(description=hug.format(author, mention), colour=discord.Colour(0xba4b5b))
+        embed.set_image(url=image)
+
+        await context.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Weeb(bot))
