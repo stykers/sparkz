@@ -7,5 +7,6 @@
   "prefix": [
     "s!"
   ],
-  "playing": "Stykers"
+  "playing": "Stykers",
+  "debug": false
 }
