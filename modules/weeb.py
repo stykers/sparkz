@@ -21,8 +21,20 @@ class Weeb(commands.Cog):
         hug = "**{0} gave {1} a hug!**"
 
         choices = ['https://cdn.stykers.moe/img/hug/1.gif', 'https://cdn.stykers.moe/img/hug/2.gif',
-                   'https://cdn.stykers.moe/img/hug/3.gif',
-                   'https://cdn.stykers.moe/img/hug/4.gif', 'https://cdn.stykers.moe/img/hug/5.gif']
+                   'https://cdn.stykers.moe/img/hug/3.gif', 'https://cdn.stykers.moe/img/hug/4.gif',
+                   'https://cdn.stykers.moe/img/hug/5.gif', 'https://cdn.stykers.moe/img/hug/6.gif',
+                   'https://cdn.stykers.moe/img/hug/7.gif', 'https://cdn.stykers.moe/img/hug/8.gif',
+                   'https://cdn.stykers.moe/img/hug/9.gif', 'https://cdn.stykers.moe/img/hug/10.gif',
+                   'https://cdn.stykers.moe/img/hug/11.gif', 'https://cdn.stykers.moe/img/hug/12.gif',
+                   'https://cdn.stykers.moe/img/hug/13.gif', 'https://cdn.stykers.moe/img/hug/14.gif',
+                   'https://cdn.stykers.moe/img/hug/15.gif', 'https://cdn.stykers.moe/img/hug/16.gif',
+                   'https://cdn.stykers.moe/img/hug/17.gif', 'https://cdn.stykers.moe/img/hug/18.gif',
+                   'https://cdn.stykers.moe/img/hug/19.gif', 'https://cdn.stykers.moe/img/hug/20.gif',
+                   'https://cdn.stykers.moe/img/hug/21.gif', 'https://cdn.stykers.moe/img/hug/22.gif',
+                   'https://cdn.stykers.moe/img/hug/23.gif', 'https://cdn.stykers.moe/img/hug/24.gif',
+                   'https://cdn.stykers.moe/img/hug/25.gif', 'https://cdn.stykers.moe/img/hug/26.gif',
+                   'https://cdn.stykers.moe/img/hug/27.gif', 'https://cdn.stykers.moe/img/hug/28.gif',
+                   'https://cdn.stykers.moe/img/hug/29.gif']
 
         image = random.choice(choices)
 
