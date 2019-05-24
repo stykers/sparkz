@@ -1,5 +1,5 @@
 #!/bin/sh
-
+cp -R -u -p config.json.gen config.json
 sparkz () {
     if python3 -m sparkz; then
         clear

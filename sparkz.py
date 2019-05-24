@@ -1,17 +1,17 @@
 import os
 
+from shutil import copyfile
 from discord.ext.commands import HelpFormatter
 from util.data import Bot
 from util import permissions, essential
-from shutil import copyfile
 from discord import LoginFailure
-
 
 print("Checking config files...")
 if not os.path.exists("config.json"):
     copyfile("config.json.gen", "config.json")
     print("Config file generated.\nPlease replace the bot token and master ID with your own data.")
     exit(0)
+
 
 config = essential.get("config.json")
 description = """
