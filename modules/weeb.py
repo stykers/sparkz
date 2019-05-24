@@ -58,3 +58,25 @@ class Weeb(commands.Cog):
         embed = discord.Embed(colour=discord.Colour.blue())
         embed.set_image(url=nekos['neko'])
         await ctx.send(embed=embed)
+
+    @commands.command(pass_context=True)
+    async def poke(self, context, member: discord.Member):
+        """Poke someone!"""
+        author = context.message.author.mention
+        mention = member.mention
+
+        poke = "**{0} poked {1}!**"
+
+        choices = ['https://cdn.stykers.moe/img/poke/1.gif']
+
+        image = random.choice(choices)
+
+        embed = discord.Embed(description=poke.format(author, mention), colour=discord.Colour(0xba4b5b))
+        embed.set_image(url=image)
+
+        await context.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Weeb(bot))
+
