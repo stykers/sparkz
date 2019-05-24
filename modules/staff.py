@@ -48,6 +48,15 @@ class Staff(commands.Cog):
 
     @commands.command()
     @commands.check(repository.is_master)
+    async def shutdown(self, ctx):
+        """ Shuts down sparkz. """
+        await ctx.send(f"I am shutting down =(")
+        # time.sleep(1)
+        open("shutdown", 'a').close()
+        await self.bot.close()
+
+    @commands.command()
+    @commands.check(repository.is_master)
     async def load(self, ctx, name: str):
         """ Loads a plugin that wasn't loaded on startup. """
         try:

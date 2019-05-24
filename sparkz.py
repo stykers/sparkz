@@ -14,6 +14,7 @@ Made by Stykers <3
 
 oauth_url = ""
 
+
 class HelpFormat(HelpFormatter):
     async def format_help_for(self, context, command_or_bot):
         if permissions.can_react(context):
@@ -23,8 +24,8 @@ class HelpFormat(HelpFormatter):
 
 
 print("Checking config files...")
-if not os.path.exists(config.json):
-    copyfile(config.json.gen, config.json)
+if not os.path.exists("config.json"):
+    copyfile("config.json.gen", "config.json")
     print("Config file generated.\nPlease replace the bot token and master ID with your own data.")
     exit(0)
 print("Loading plugins...")
@@ -53,4 +54,7 @@ except LoginFailure:
 except Exception as exception:
     print("Something is preventing me from starting.")
     print(exception)
-print("Exiting!")
+if os.path.exists("shutdown"):
+    os.remove("shutdown")
+    exit(1)
+print("Aborting!")
