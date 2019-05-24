@@ -67,7 +67,15 @@ class Weeb(commands.Cog):
 
         poke = "**{0} poked {1}!**"
 
-        choices = ['https://cdn.stykers.moe/img/poke/1.gif']
+        choices = ['https://cdn.stykers.moe/img/poke/1.gif', 'https://cdn.stykers.moe/img/poke/2.gif',
+                   'https://cdn.stykers.moe/img/poke/3.gif', 'https://cdn.stykers.moe/img/poke/4.gif',
+                   'https://cdn.stykers.moe/img/poke/5.gif', 'https://cdn.stykers.moe/img/poke/6.gif',
+                   'https://cdn.stykers.moe/img/poke/7.gif', 'https://cdn.stykers.moe/img/poke/8.gif',
+                   'https://cdn.stykers.moe/img/poke/9.gif', 'https://cdn.stykers.moe/img/poke/10.gif',
+                   'https://cdn.stykers.moe/img/poke/11.gif', 'https://cdn.stykers.moe/img/poke/12.gif',
+                   'https://cdn.stykers.moe/img/poke/13.gif', 'https://cdn.stykers.moe/img/poke/14.gif',
+                   'https://cdn.stykers.moe/img/poke/15.gif', 'https://cdn.stykers.moe/img/poke/16.gif',
+                   'https://cdn.stykers.moe/img/poke/17.gif']
 
         image = random.choice(choices)
 
@@ -79,4 +87,3 @@ class Weeb(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Weeb(bot))
-
