@@ -15,44 +15,44 @@ class Information(commands.Cog):
         self.process = psutil.Process(os.getpid())
 
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, context):
         """ Ping. """
         before = time.monotonic()
-        message = await ctx.send("Pong")
+        message = await context.send("Pong")
         ping = (time.monotonic() - before) * 1000
         await message.edit(content=f"Pong   |   {int(ping)}ms")
 
     @commands.command(aliases=['oauth', 'join'])
-    async def invite(self, ctx):
+    async def invite(self, context):
         """ Generate invite url. """
-        await ctx.send(
-            f"**{ctx.author.name}**, here is the oauth url:\n<{discord.utils.oauth_url(self.bot.user.id)}>"
+        await context.send(
+            f"**{context.author.name}**, here is the oauth url:\n<{discord.utils.oauth_url(self.bot.user.id)}>"
         )
 
     @commands.command(aliases=['info', 'stats', 'status'])
-    async def about(self, ctx):
+    async def about(self, context):
         """ About the bot """
         ramusage = self.process.memory_full_info().rss / 1024 ** 2
         avgmembers = round(len(self.bot.users) / len(self.bot.guilds))
 
         embed = discord.Embed(colour=discord.Color.dark_red())
-        embed.set_thumbnail(url=ctx.bot.user.avatar_url)
+        embed.set_thumbnail(url=context.bot.user.avatar_url)
         embed.add_field(
             name=f"Master{'' if len(self.config.masters) == 1 else 's'}",
             value=', '.join([str(self.bot.get_user(x)) for x in self.config.masters]),
             inline=True)
         embed.add_field(name="Library", value="discord.py", inline=True)
-        embed.add_field(name="Servers", value=f"{len(ctx.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
+        embed.add_field(name="Servers", value=f"{len(context.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
         embed.add_field(name="RAM", value=f"{ramusage:.2f} MiB", inline=True)
 
-        await ctx.send(content=f"ℹ About **{ctx.bot.user}** | **{repository.version}**", embed=embed)
+        await context.send(content=f"ℹ About **{context.bot.user}** | **{repository.version}**", embed=embed)
 
     @commands.command()
     @commands.guild_only()
-    async def user(self, ctx, *, user: discord.Member = None):
+    async def user(self, context, *, user: discord.Member = None):
         """ Retrieve user info. """
         if user is None:
-            user = ctx.author
+            user = context.author
 
         embed = discord.Embed(colour=user.top_role.colour.value)
         embed.set_thumbnail(url=user.avatar_url)
@@ -64,26 +64,26 @@ class Information(commands.Cog):
 
         embed.add_field(
             name="Roles",
-            value=', '.join([f"<@&{x.id}>" for x in user.roles if x is not ctx.guild.default_role]) if len(
+            value=', '.join([f"<@&{x.id}>" for x in user.roles if x is not context.guild.default_role]) if len(
                 user.roles) > 1 else 'None',
             inline=False
         )
 
-        await ctx.send(content=f"ℹ About **{user.id}**", embed=embed)
+        await context.send(content=f"ℹ About **{user.id}**", embed=embed)
 
     @commands.command()
     @commands.guild_only()
-    async def pfp(self, ctx, *, user: discord.Member = None):
+    async def pfp(self, context, *, user: discord.Member = None):
         """ Get the pfp of you or someone else """
         if user is None:
-            user = ctx.author
+            user = context.author
 
-        await ctx.send(f"Profile picture of **{user.name}**\n{user.avatar_url_as(size=1024)}")
+        await context.send(f"Profile picture of **{user.name}**\n{user.avatar_url_as(size=1024)}")
 
     @pfp.error
-    async def pfp_handler(self, ctx, error):
+    async def pfp_handler(self, context, error):
         if isinstance(error, commands.BadArgument):
-            await ctx.send(f"That user does not exist!")
+            await context.send(f"That user does not exist!")
 
 
 def setup(bot):

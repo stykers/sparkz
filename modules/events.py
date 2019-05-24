@@ -11,14 +11,14 @@ from discord.ext.commands import errors
 from util import essential
 
 
-async def send_command_help(ctx):
-    if ctx.invoked_subcommand:
-        _help = await ctx.bot.formatter.format_help_for(ctx, ctx.invoked_subcommand)
+async def send_command_help(context):
+    if context.invoked_subcommand:
+        _help = await context.bot.formatter.format_help_for(context, context.invoked_subcommand)
     else:
-        _help = await ctx.bot.formatter.format_help_for(ctx, ctx.command)
+        _help = await context.bot.formatter.format_help_for(context, context.command)
 
     for page in _help:
-        await ctx.send(page)
+        await context.send(page)
 
 
 class Events(commands.Cog):
@@ -29,29 +29,29 @@ class Events(commands.Cog):
         self.process = psutil.Process(os.getpid())
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, err):
+    async def on_command_error(self, context, err):
         if isinstance(err, errors.MissingRequiredArgument) or isinstance(err, errors.BadArgument):
-            await send_command_help(ctx)
+            await send_command_help(context)
 
         elif isinstance(err, errors.CommandInvokeError):
             err = err.original
 
             _traceback = traceback.format_tb(err.__traceback__)
             _traceback = ''.join(_traceback)
-            error = '```py\n{2}{0}: {3}\n```'.format(type(err).__name__, ctx.message.content, _traceback, err)
+            error = '```py\n{2}{0}: {3}\n```'.format(type(err).__name__, context.message.content, _traceback, err)
 
-            await ctx.send(f"An error occurred while the server is interpreting your command.")
+            await context.send(f"An error occurred while the server is interpreting your command.")
             if self.config.debug:
-                await ctx.send(error)
+                await context.send(error)
 
         elif isinstance(err, errors.CheckFailure):
             pass
 
         elif isinstance(err, errors.CommandOnCooldown):
-            await ctx.send(f"This command is on cooldown, please try again in {err.retry_after:.2f} seconds.")
+            await context.send(f"This command is on cooldown, please try again in {err.retry_after:.2f} seconds.")
 
         elif isinstance(err, errors.CommandNotFound):
-            await ctx.send(f"Command not found.")
+            await context.send(f"Command not found.")
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -68,11 +68,11 @@ class Events(commands.Cog):
             await to_send.send(self.config.join_message)
 
     @commands.Cog.listener()
-    async def on_command(self, ctx):
+    async def on_command(self, context):
         try:
-            print(f"{ctx.author}@{ctx.guild.name} > {ctx.message.clean_content}")
+            print(f"{context.author}@{context.guild.name} > {context.message.clean_content}")
         except AttributeError:
-            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+            print(f"Private message > {context.author} > {context.message.clean_content}")
 
     @commands.Cog.listener()
     async def on_ready(self):

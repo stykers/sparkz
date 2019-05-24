@@ -51,14 +51,14 @@ class Weeb(commands.Cog):
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
-    async def neko(self, ctx):
+    async def neko(self, context):
         """Nekos! \\o/ Warning: Some lewd nekos exist o_o"""
         async with self.session.get("https://nekos.life/api/neko") as resp:
             nekos = await resp.json()
 
         embed = discord.Embed(colour=discord.Colour.blue())
         embed.set_image(url=nekos['neko'])
-        await ctx.send(embed=embed)
+        await context.send(embed=embed)
 
     @commands.command(pass_context=True)
     async def poke(self, context, member: discord.Member):
