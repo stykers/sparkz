@@ -144,6 +144,88 @@ class Weeb(commands.Cog):
 
         await context.send(embed=embed)
 
+    @commands.command(pass_context=True)
+    async def smug(self, context):
+        """Smug on everyone xD"""
+        author = context.message.author.mention
+
+        smug = "**{0} your smug image.**"
+
+        choices = ['https://cdn.stykers.moe/img/smug/129.jpg', 'https://cdn.stykers.moe/img/smug/120.jpg',
+                   'https://cdn.stykers.moe/img/smug/123.jpg', 'https://cdn.stykers.moe/img/smug/27.png',
+                   'https://cdn.stykers.moe/img/smug/55.png', 'https://cdn.stykers.moe/img/smug/93.png',
+                   'https://cdn.stykers.moe/img/smug/24.jpg', 'https://cdn.stykers.moe/img/smug/15.jpg',
+                   'https://cdn.stykers.moe/img/smug/83.png', 'https://cdn.stykers.moe/img/smug/130.jpg',
+                   'https://cdn.stykers.moe/img/smug/109.jpg', 'https://cdn.stykers.moe/img/smug/114.png',
+                   'https://cdn.stykers.moe/img/smug/100.jpg', 'https://cdn.stykers.moe/img/smug/38.png',
+                   'https://cdn.stykers.moe/img/smug/71.png', 'https://cdn.stykers.moe/img/smug/7.jpg',
+                   'https://cdn.stykers.moe/img/smug/16.jpg', 'https://cdn.stykers.moe/img/smug/116.jpg',
+                   'https://cdn.stykers.moe/img/smug/19.jpg', 'https://cdn.stykers.moe/img/smug/82.jpg',
+                   'https://cdn.stykers.moe/img/smug/117.jpg', 'https://cdn.stykers.moe/img/smug/127.jpg',
+                   'https://cdn.stykers.moe/img/smug/35.jpg', 'https://cdn.stykers.moe/img/smug/87.png',
+                   'https://cdn.stykers.moe/img/smug/80.png', 'https://cdn.stykers.moe/img/smug/53.jpg',
+                   'https://cdn.stykers.moe/img/smug/132.png', 'https://cdn.stykers.moe/img/smug/4.png',
+                   'https://cdn.stykers.moe/img/smug/23.jpg', 'https://cdn.stykers.moe/img/smug/14.jpg',
+                   'https://cdn.stykers.moe/img/smug/81.jpg', 'https://cdn.stykers.moe/img/smug/22.jpg',
+                   'https://cdn.stykers.moe/img/smug/119.jpg', 'https://cdn.stykers.moe/img/smug/124.png',
+                   'https://cdn.stykers.moe/img/smug/103.jpg', 'https://cdn.stykers.moe/img/smug/135.png',
+                   'https://cdn.stykers.moe/img/smug/13.png', 'https://cdn.stykers.moe/img/smug/107.jpg',
+                   'https://cdn.stykers.moe/img/smug/101.jpg', 'https://cdn.stykers.moe/img/smug/20.jpg',
+                   'https://cdn.stykers.moe/img/smug/40.png', 'https://cdn.stykers.moe/img/smug/131.jpg',
+                   'https://cdn.stykers.moe/img/smug/6.jpg', 'https://cdn.stykers.moe/img/smug/37.jpg',
+                   'https://cdn.stykers.moe/img/smug/50.jpg', 'https://cdn.stykers.moe/img/smug/111.jpg',
+                   'https://cdn.stykers.moe/img/smug/68.jpg', 'https://cdn.stykers.moe/img/smug/34.jpg',
+                   'https://cdn.stykers.moe/img/smug/63.jpg', 'https://cdn.stykers.moe/img/smug/110.jpg',
+                   'https://cdn.stykers.moe/img/smug/48.png', 'https://cdn.stykers.moe/img/smug/64.jpg',
+                   'https://cdn.stykers.moe/img/smug/28.jpg', 'https://cdn.stykers.moe/img/smug/41.png',
+                   'https://cdn.stykers.moe/img/smug/122.png', 'https://cdn.stykers.moe/img/smug/18.jpg',
+                   'https://cdn.stykers.moe/img/smug/102.png', 'https://cdn.stykers.moe/img/smug/91.jpg',
+                   'https://cdn.stykers.moe/img/smug/49.jpg', 'https://cdn.stykers.moe/img/smug/43.png',
+                   'https://cdn.stykers.moe/img/smug/89.jpg', 'https://cdn.stykers.moe/img/smug/75.png',
+                   'https://cdn.stykers.moe/img/smug/108.jpg', 'https://cdn.stykers.moe/img/smug/8.jpg',
+                   'https://cdn.stykers.moe/img/smug/51.jpg', 'https://cdn.stykers.moe/img/smug/99.png',
+                   'https://cdn.stykers.moe/img/smug/57.jpg', 'https://cdn.stykers.moe/img/smug/61.jpg',
+                   'https://cdn.stykers.moe/img/smug/94.jpg', 'https://cdn.stykers.moe/img/smug/26.png',
+                   'https://cdn.stykers.moe/img/smug/118.png', 'https://cdn.stykers.moe/img/smug/2.jpg',
+                   'https://cdn.stykers.moe/img/smug/30.jpg', 'https://cdn.stykers.moe/img/smug/90.jpg',
+                   'https://cdn.stykers.moe/img/smug/113.png', 'https://cdn.stykers.moe/img/smug/3.jpg',
+                   'https://cdn.stykers.moe/img/smug/47.png', 'https://cdn.stykers.moe/img/smug/60.jpg',
+                   'https://cdn.stykers.moe/img/smug/112.png', 'https://cdn.stykers.moe/img/smug/12.png',
+                   'https://cdn.stykers.moe/img/smug/59.png', 'https://cdn.stykers.moe/img/smug/17.png',
+                   'https://cdn.stykers.moe/img/smug/84.jpg', 'https://cdn.stykers.moe/img/smug/126.png',
+                   'https://cdn.stykers.moe/img/smug/134.png', 'https://cdn.stykers.moe/img/smug/79.jpg',
+                   'https://cdn.stykers.moe/img/smug/72.png', 'https://cdn.stykers.moe/img/smug/92.png',
+                   'https://cdn.stykers.moe/img/smug/32.jpg', 'https://cdn.stykers.moe/img/smug/56.jpg',
+                   'https://cdn.stykers.moe/img/smug/121.jpg', 'https://cdn.stykers.moe/img/smug/105.jpg',
+                   'https://cdn.stykers.moe/img/smug/39.jpg', 'https://cdn.stykers.moe/img/smug/21.png',
+                   'https://cdn.stykers.moe/img/smug/29.jpg', 'https://cdn.stykers.moe/img/smug/66.png',
+                   'https://cdn.stykers.moe/img/smug/65.jpg', 'https://cdn.stykers.moe/img/smug/133.jpg',
+                   'https://cdn.stykers.moe/img/smug/9.jpg', 'https://cdn.stykers.moe/img/smug/106.jpg',
+                   'https://cdn.stykers.moe/img/smug/36.jpg', 'https://cdn.stykers.moe/img/smug/70.jpg',
+                   'https://cdn.stykers.moe/img/smug/128.png', 'https://cdn.stykers.moe/img/smug/96.png',
+                   'https://cdn.stykers.moe/img/smug/42.jpg', 'https://cdn.stykers.moe/img/smug/54.png',
+                   'https://cdn.stykers.moe/img/smug/77.jpg', 'https://cdn.stykers.moe/img/smug/97.jpg',
+                   'https://cdn.stykers.moe/img/smug/10.png', 'https://cdn.stykers.moe/img/smug/46.jpg',
+                   'https://cdn.stykers.moe/img/smug/78.jpg', 'https://cdn.stykers.moe/img/smug/125.jpg',
+                   'https://cdn.stykers.moe/img/smug/73.jpg', 'https://cdn.stykers.moe/img/smug/76.jpg',
+                   'https://cdn.stykers.moe/img/smug/52.png', 'https://cdn.stykers.moe/img/smug/44.jpg',
+                   'https://cdn.stykers.moe/img/smug/67.png', 'https://cdn.stykers.moe/img/smug/25.png',
+                   'https://cdn.stykers.moe/img/smug/104.jpg', 'https://cdn.stykers.moe/img/smug/86.jpg',
+                   'https://cdn.stykers.moe/img/smug/11.jpg', 'https://cdn.stykers.moe/img/smug/5.jpg',
+                   'https://cdn.stykers.moe/img/smug/58.jpg', 'https://cdn.stykers.moe/img/smug/95.jpg',
+                   'https://cdn.stykers.moe/img/smug/88.jpg', 'https://cdn.stykers.moe/img/smug/98.png',
+                   'https://cdn.stykers.moe/img/smug/115.jpg', 'https://cdn.stykers.moe/img/smug/62.jpg',
+                   'https://cdn.stykers.moe/img/smug/31.jpg', 'https://cdn.stykers.moe/img/smug/1.jpg',
+                   'https://cdn.stykers.moe/img/smug/45.jpg', 'https://cdn.stykers.moe/img/smug/85.jpg',
+                   'https://cdn.stykers.moe/img/smug/74.png']
+
+        image = random.choice(choices)
+
+        embed = discord.Embed(description=smug.format(author), colour=discord.Colour(0x644aba))
+        embed.set_image(url=image)
+
+        await context.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Weeb(bot))
