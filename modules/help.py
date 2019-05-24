@@ -31,6 +31,19 @@ class Help(commands.Cog):
                                         description='Please only request for one module at once.',
                                         colour=discord.Colour.red())
                 await context.send(embed=content)
+            else:
+                found = False
+                for x in self.bot.cogs:
+                    for y in module:
+                        if x == y:
+                            content = discord.Embed(title=module[0] + ' Command List', description=self.bot.cogs[module[0]].__doc__)
+                            for z in self.bot.get_cog(y).get_commands():
+                                if not z.hidden:
+                                    content.add_field(name=z.name, value=z.help, inline=False)
+                            found = True
+                if not found:
+                    content = discord.Embed(title='Invalid arguments.', description='The module does not exist.', colour=discord.Colour.red())
+                await context.send(embed=content)
 
 
 def setup(bot):
