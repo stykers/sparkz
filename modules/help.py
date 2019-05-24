@@ -9,9 +9,11 @@ class Help(commands.Cog):
         self.bot = bot
 
     @commands.command(pass_context=True)
-    async def help(self, context, command = None):
+    async def help(self, context, *module):
         """The help command."""
-        await context.send(embed="Still working on this, sorry.")
+        if not module:
+            content = discord.Embed(title='Overall Help', description='Use `s!help <module>` to view help of a specific module')
+            await context.send(embed=content)
 
 
 def setup(bot):

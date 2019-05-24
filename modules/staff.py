@@ -25,7 +25,7 @@ class Staff(commands.Cog):
                 return await ctx.send(f"You are my creator <3 Thank you for everything!")
             else:
                 return await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
-        await ctx.send(f"Nooooooooooooooooo :(")
+        await ctx.send(f"Nooooooooooooooooo :( Please don't hurt me > <")
 
     @commands.command()
     @commands.check(repository.is_master)
