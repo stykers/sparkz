@@ -22,7 +22,7 @@ class Staff(commands.Cog):
         if ctx.author.id in self.config.masters:
             if ctx.author.id == 468703341816578059:
                 await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
-                return await ctx.send(f"Also, you are my creator!")
+                return await ctx.send(f"You are my creator <3 Thank you for everything!")
             else:
                 return await ctx.send(f"Sparkz at your service, master **{ctx.author.name}**.")
         await ctx.send(f"Nooooooooooooooooo :(")
