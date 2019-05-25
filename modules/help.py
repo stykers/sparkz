@@ -12,6 +12,7 @@ class Help(commands.Cog):
     @commands.command(pass_context=True)
     async def help(self, context, *module):
         """The help command."""
+        global content
         if not module:
             content = discord.Embed(title='Overall Help',
                                     description='Use `s!help <module>` to view help of a specific module',

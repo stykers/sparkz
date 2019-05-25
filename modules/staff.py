@@ -112,6 +112,7 @@ class Staff(commands.Cog):
     @commands.group()
     @commands.check(repository.is_master)
     async def config(self, context):
+        """Write to the configuration of the bot"""
         if context.invoked_subcommand is None:
             _help = await context.bot.formatter.format_help_for(context, context.command)
 
