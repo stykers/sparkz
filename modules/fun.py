@@ -1,5 +1,4 @@
 import random
-import discord
 import secrets
 
 from discord.ext import commands
