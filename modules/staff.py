@@ -233,6 +233,17 @@ class Staff(commands.Cog):
         else:
             await context.send(f"Message delivered.")
 
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def guilds(self, context):
+        """Lists the guilds I'm in."""
+        content = discord.Embed(title='Guild List',
+                                description='A full list of guilds I am in.',
+                                colour=discord.Colour.red())
+        for guild in self.bot.guilds:
+            content.add_field(name=guild, value='----------', inline=False)
+        await context.send(embed=content)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
