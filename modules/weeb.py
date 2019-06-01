@@ -79,12 +79,15 @@ class Weeb(commands.Cog):
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, context):
         """Nekos! \\o/ Warning: Some lewd nekos exist o_o"""
-        async with self.session.get("https://nekos.life/api/neko") as resp:
-            nekos = await resp.json()
+        if context.channel.is_nsfw():
+            async with self.session.get("https://nekos.life/api/neko") as resp:
+                nekos = await resp.json()
 
-        embed = discord.Embed(colour=discord.Colour.blue())
-        embed.set_image(url=nekos['neko'])
-        await context.send(embed=embed)
+            embed = discord.Embed(colour=discord.Colour.blue())
+            embed.set_image(url=nekos['neko'])
+            await context.send(embed=embed)
+        else:
+            await context.send(f"You can only use this command in an NSFW channel.")
 
     @commands.command(pass_context=True)
     async def poke(self, context, member: discord.Member):
