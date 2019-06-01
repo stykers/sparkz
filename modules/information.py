@@ -41,7 +41,7 @@ class Information(commands.Cog):
             name=f"Master{'' if len(self.config.masters) == 1 else 's'}",
             value=', '.join([str(self.bot.get_user(x)) for x in self.config.masters]),
             inline=True)
-        embed.add_field(name="Library", value="discord.py", inline=True)
+        embed.add_field(name="Homepage", value="https://sparkz.stykers.moe/", inline=True)
         embed.add_field(name="Servers", value=f"{len(context.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
         embed.add_field(name="RAM", value=f"{ramusage:.2f} MiB", inline=True)
 
