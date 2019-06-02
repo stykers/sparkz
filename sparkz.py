@@ -1,10 +1,12 @@
 import os
+import aiohttp
 
 from shutil import copyfile
 from discord.ext.commands import HelpFormatter
 from util.data import Bot
 from util import permissions, essential
 from discord import LoginFailure
+from util import http
 
 print("Checking config files...")
 if not os.path.exists("config.json"):
@@ -35,7 +37,7 @@ help_attrs = dict(hidden=True)
 bot = Bot(
     command_prefix=config.prefix,
     prefix=config.prefix,
-    pm_help=True,
+    pm_help=False,
     help_attrs=help_attrs,
     formatter=HelpFormat()
 )
@@ -48,6 +50,7 @@ for file in os.listdir("plugins"):
         name = file[:-3]
         bot.load_extension(f"plugins.{name}")
 print("Contacting discord.")
+
 try:
     bot.run(config.token)
 except LoginFailure:
@@ -58,5 +61,5 @@ except Exception as exception:
     print(exception)
 if os.path.exists("shutdown"):
     os.remove("shutdown")
+    print("Aborting!")
     exit(1)
-print("Aborting!")
