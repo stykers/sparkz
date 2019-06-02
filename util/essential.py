@@ -47,17 +47,17 @@ def actionmessage(case, mass=False):
     return f"✅ {output}"
 
 
-async def formatoutput(ctx, filename: str = "Output", outputmsg: str = "Here is the data requested:", loop=None):
+async def formatoutput(context, filename: str = "Output", outputmsg: str = "Here is the data requested:", loop=None):
     if not loop:
-        return await ctx.send("The output is empty :(")
+        return await context.send("The output is empty :(")
 
     formatted = "\r\n".join([f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)])
 
     if len(loop) < 15:
-        return await ctx.send(f"{outputmsg}```ini\n{formatted}```")
+        return await context.send(f"{outputmsg}```ini\n{formatted}```")
 
     data = BytesIO(formatted.encode('utf-8'))
-    await ctx.send(
+    await context.send(
         content=outputmsg,
         file=discord.File(data, filename=timetext(filename.title()))
     )

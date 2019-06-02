@@ -4,5 +4,5 @@ masters = essential.get("config.json").masters
 version = "1.0.0-ALPHA"
 
 
-def is_master(ctx):
-    return ctx.author.id in masters
+def is_master(context):
+    return context.author.id in masters

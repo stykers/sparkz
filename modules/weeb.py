@@ -79,7 +79,7 @@ class Weeb(commands.Cog):
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, context):
         """Nekos! \\o/ Warning: Some lewd nekos exist o_o"""
-        if context.channel.is_nsfw():
+        if permissions.is_nsfw(context):
             async with self.session.get("https://nekos.life/api/neko") as resp:
                 nekos = await resp.json()
 
