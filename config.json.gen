@@ -8,5 +8,11 @@
     "s!"
   ],
   "playing": "Stykers",
+  "mysql": {
+    "db_host": "localhost",
+    "db_user": "sparkz",
+    "db_pass": "password",
+    "db": "sparkz"
+  }
   "debug": false
 }
