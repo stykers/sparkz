@@ -11,9 +11,8 @@ class HTTPSession(aiohttp.ClientSession):
         super().__init__(loop=loop or asyncio.get_event_loop())
 
     def __del__(self, **kwargs):
-        """Cleanup function that should have been in discord.py"""
-        if not self.closed:
-            self.close()
+        """Cleanup in del that doesn't work cause it's coroutine"""
+        self.close()
 
 
 session = HTTPSession()
