@@ -6,7 +6,7 @@ import asyncio
 from asyncio.subprocess import PIPE
 from discord.ext import commands
 from io import BytesIO
-from util import repository, essential, http, writer
+from util import repository, essential, http, writer, permissions
 
 
 # noinspection PyBroadException
@@ -45,6 +45,8 @@ class Staff(commands.Cog):
         """ Restarts sparkz. """
         await context.send(f"I am restarting <3")
         # time.sleep(1)
+        # if not http.session.closed:
+        #     await http.session.close()
         await self.bot.close()
 
     @commands.command()
@@ -229,7 +231,7 @@ class Staff(commands.Cog):
             await user.send('', embed=result)
         except Exception as exception:
             await context.send(f"Your message failed to deliver.")
-            # await context.send(exception)
+            await context.send(exception)
         else:
             await context.send(f"Message delivered.")
 
@@ -241,8 +243,29 @@ class Staff(commands.Cog):
                                 description='A full list of guilds I am in.',
                                 colour=discord.Colour.red())
         for guild in self.bot.guilds:
-            content.add_field(name=guild, value='----------', inline=False)
+            content.add_field(name=guild, value=guild.id, inline=False)
         await context.send(embed=content)
+
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def geninvite(self, context, guild_id):
+        """Generates a one use invite """
+        # try:
+        # except AttributeError or TypeError:
+        #     await context.send(f"Invalid guild id.")
+
+        guild = self.bot.get_guild(int(guild_id))
+        global channel
+        channel = None
+        for x in guild.text_channels:
+            if permissions.can_create_invite(context):
+                channel = x
+                return
+        if channel is not None:
+            invite = await channel.create_instant_invite(channel, max_age=30, max_uses=1, unique='true')
+            await context.send(invite)
+        if channel is None:
+            await context.send(f"I do not have permission to create invites on any channel of the specified guild.")
 
 
 def setup(bot):
