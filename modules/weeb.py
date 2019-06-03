@@ -87,7 +87,13 @@ class Weeb(commands.Cog):
             embed.set_image(url=nekos['neko'])
             await context.send(embed=embed)
         else:
-            await context.send(f"You can only use this command in an NSFW channel.")
+            # await context.send(f"You can only use this command in an NSFW channel.")
+            async with self.session.get("https://nekos.life/api/neko") as resp:
+                nekos = await resp.json()
+
+            embed = discord.Embed(colour=discord.Colour.blue())
+            embed.set_image(url=nekos['neko'])
+            await context.send(embed=embed)
 
     @commands.command(pass_context=True)
     async def poke(self, context, member: discord.Member):

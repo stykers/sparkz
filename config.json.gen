@@ -9,10 +9,11 @@
   ],
   "playing": "Stykers",
   "mysql": {
-    "db_host": "localhost",
-    "db_user": "sparkz",
-    "db_pass": "password",
+    "host": "localhost",
+    "port": "3306",
+    "username": "sparkz",
+    "password": "password",
     "db": "sparkz"
-  }
+  },
   "debug": false
 }
