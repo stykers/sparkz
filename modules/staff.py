@@ -189,7 +189,7 @@ class Staff(commands.Cog):
         try:
             await context.guild.me.edit(nick=name)
             if name:
-                await context.send(f"I am now nicked as **{name}**")
+                await context.send(f"I am now nicked as **{name}**.")
             else:
                 await context.send("Nickname successfully reset.")
         except Exception as err:
