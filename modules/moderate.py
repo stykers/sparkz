@@ -1,7 +1,5 @@
 import discord
 import re
-import time
-import threading
 
 from discord.ext import commands
 from util import permissions, essential
