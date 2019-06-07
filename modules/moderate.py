@@ -1,5 +1,7 @@
 import discord
 import re
+import time
+import threading
 
 from discord.ext import commands
 from util import permissions, essential
@@ -30,9 +32,12 @@ class ActionReason(commands.Converter):
 
 class Moderate(commands.Cog):
     """Utilities for moderators."""
+    bot = None
+
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")
+        Moderate.bot = bot
 
     @commands.command()
     @commands.guild_only()
@@ -198,7 +203,9 @@ class Moderate(commands.Cog):
 
         deleted = len(deleted)
         if message is True:
-            await context.send(f'🚮 Successfully removed {deleted} message{"" if deleted == 1 else "s"}.')
+            deleted = await context.send(f'🚮 Successfully removed {deleted} message{"" if deleted == 1 else "s"}.')
+            await Moderate.bot.http.delete_message(deleted.channel.id, deleted.id)
+            await Moderate.bot.http.delete_message(context.message.channel.id, context.message.id)
 
     @prune.command()
     async def embeds(self, context, search=100):
