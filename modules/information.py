@@ -42,7 +42,7 @@ class Information(commands.Cog):
             value=', '.join([str(self.bot.get_user(x)) for x in self.config.masters]),
             inline=True)
         embed.add_field(name="Homepage", value="https://sparkz.stykers.moe/", inline=True)
-        embed.add_field(name="Servers", value=f"{len(context.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
+        embed.add_field(name="Guilds", value=f"{len(context.bot.guilds)} ( avg: {avgmembers} users/server )", inline=True)
         embed.add_field(name="RAM", value=f"{ramusage:.2f} MiB", inline=True)
 
         await context.send(content=f"ℹ About **{context.bot.user}** | **{repository.version}**", embed=embed)
