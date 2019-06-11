@@ -266,6 +266,12 @@ class Staff(commands.Cog):
         if channel is None:
             await context.send(f"I do not have permission to create invites on any channel of the specified guild.")
 
+    @commands.command()
+    @commands.check(repository.is_master)
+    async def say(self, context, *, message):
+        """ Says something as the bot. """
+        await context.send(message)
+
 
 def setup(bot):
     bot.add_cog(Staff(bot))
