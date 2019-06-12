@@ -2,7 +2,7 @@ import os
 import aiohttp
 
 from shutil import copyfile
-from discord.ext.commands import HelpFormatter
+from discord.ext.commands import HelpCommand
 from util.data import Bot
 from util import permissions, essential
 from discord import LoginFailure
@@ -24,12 +24,12 @@ Made by Stykers <3
 oauth_url = ""
 
 
-class HelpFormat(HelpFormatter):
+class HelpFormat(HelpCommand):
     async def format_help_for(self, context, command_or_bot):
         if permissions.can_react(context):
             await context.message.add_reaction(chr(0x2709))
 
-        return await super().format_help_for(context, command_or_bot)
+        return await super().prepare_help_command(context, command_or_bot)
 
 
 print("Loading plugins...")
