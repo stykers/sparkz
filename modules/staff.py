@@ -219,9 +219,8 @@ class Staff(commands.Cog):
 
     @commands.command()
     @commands.check(repository.is_master)
-    async def tell(self, context, name: str, *, msg: str):
+    async def tell(self, context, user: discord.Member = None, *, msg: str):
         """ Sends a specified user a private message. """
-        user = await self.bot.get_user_info(name)
         try:
             result = discord.Embed(colour=discord.Colour.blue())
             result.title = "The master has got a message for you."
