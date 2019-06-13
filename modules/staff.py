@@ -247,8 +247,10 @@ class Staff(commands.Cog):
             await message.edit(content=f"```fix\n{err}\n```")
             await context.send("Update successful, restarting.")
             await self.bot.close()
-        else:
+        if out == "Already up to date.":
             await message.edit(content="Already up to date.")
+        else:
+            await message.edit(content=f"Something unexpected happened, please report this if you think it's a bug.")
 
     @commands.command()
     @commands.check(repository.is_master)
