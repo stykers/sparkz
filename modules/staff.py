@@ -244,12 +244,11 @@ class Staff(commands.Cog):
         err = (await proc.stderr.read()).decode('utf-8').strip()
 
         if err:
-            await message.edit(content="Something went wrong:")
-            await context.send(f"```fix\n{err}\n```")
-        else:
-            await message.edit(content=f"```fix\n{out}\n```")
+            await message.edit(content=f"```fix\n{err}\n```")
             await context.send("Done, restarting.")
             await self.bot.close()
+        else:
+            await message.edit(content="Already up to date.")
 
     @commands.command()
     @commands.check(repository.is_master)
