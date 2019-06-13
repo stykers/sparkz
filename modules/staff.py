@@ -236,6 +236,22 @@ class Staff(commands.Cog):
 
     @commands.command()
     @commands.check(repository.is_master)
+    async def update(self, context):
+        """ Updates the bot from the git repository. """
+        message = await context.send(f"Please wait...")
+        proc = await asyncio.create_subprocess_shell("git pull", stdin=None, stderr=PIPE, stdout=PIPE)
+        out = (await proc.stdout.read()).decode('utf-8').strip()
+        err = (await proc.stderr.read()).decode('utf-8').strip()
+
+        if err:
+            message.edit(content="Something went wrong:")
+            context.send(f"```fix\n{err}\n```")
+        else:
+            message.edit(content=f"```fix\n{out}\n```")
+            context.send("Done, you can restart me now.")
+
+    @commands.command()
+    @commands.check(repository.is_master)
     async def guilds(self, context):
         """Lists the guilds I'm in."""
         content = discord.Embed(title='Guild List',
