@@ -248,7 +248,8 @@ class Staff(commands.Cog):
             await context.send(f"```fix\n{err}\n```")
         else:
             await message.edit(content=f"```fix\n{out}\n```")
-            await context.send("Done, you can restart me now.")
+            await context.send("Done, restarting.")
+            await self.bot.close()
 
     @commands.command()
     @commands.check(repository.is_master)
