@@ -245,7 +245,7 @@ class Staff(commands.Cog):
 
         if err:
             await message.edit(content=f"```fix\n{err}\n```")
-            await context.send("Done, restarting.")
+            await context.send("Update successful, restarting.")
             await self.bot.close()
         else:
             await message.edit(content="Already up to date.")
