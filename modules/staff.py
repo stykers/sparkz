@@ -11,6 +11,7 @@ from util import repository, essential, http, writer, permissions
 # noinspection PyBroadException
 class Staff(commands.Cog):
     """Utilities for staff members."""
+
     def __init__(self, bot):
         self.bot = bot
         self.config = essential.get("config.json")
@@ -103,7 +104,7 @@ class Staff(commands.Cog):
                 data = BytesIO(content.encode('utf-8'))
                 await message.delete()
                 await context.send(content=f"Output exceeded output limit, so a log file is attached.",
-                               file=discord.File(data, filename=essential.timetext(f'Output')))
+                                   file=discord.File(data, filename=essential.timetext(f'Output')))
             except asyncio.TimeoutError as e:
                 await message.delete()
                 return await context.send(e)

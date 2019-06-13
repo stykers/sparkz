@@ -1,4 +1,5 @@
-import pymysql.cursors, json
+import pymysql.cursors
+import json
 from util import essential
 
 
