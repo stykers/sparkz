@@ -1,6 +1,4 @@
 import discord
-import os
-import collections
 from discord.ext import commands
 
 
