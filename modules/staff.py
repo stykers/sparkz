@@ -239,7 +239,7 @@ class Staff(commands.Cog):
     async def update(self, context):
         """ Updates the bot from the git repository. """
         message = await context.send(f"Please wait...")
-        proc = await asyncio.create_subprocess_shell("git pull", stdin=None, stderr=PIPE, stdout=PIPE)
+        proc = await asyncio.create_subprocess_shell("./git-2.22.0/bin-wrappers/git pull", stdin=None, stderr=PIPE, stdout=PIPE)
         out = (await proc.stdout.read()).decode('utf-8').strip()
         err = (await proc.stderr.read()).decode('utf-8').strip()
 
