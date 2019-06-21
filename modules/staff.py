@@ -6,6 +6,7 @@ from asyncio.subprocess import PIPE
 from discord.ext import commands
 from io import BytesIO
 from util import repository, essential, http, writer, permissions
+from git import Repo
 
 
 # noinspection PyBroadException

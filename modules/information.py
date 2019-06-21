@@ -77,8 +77,10 @@ class Information(commands.Cog):
         """ Get the pfp of you or someone else """
         if user is None:
             user = context.author
-
-        await context.send(f"Profile picture of **{user.name}**\n{user.avatar_url_as(size=1024)}")
+        message = f"Profile picture of **{user.name}**."
+        embed = discord.Embed(colour=discord.Colour.blue(), description=message)
+        embed.set_image(url=user.avatar_url_as(size=1024))
+        await context.send(embed=embed)
 
     @pfp.error
     async def pfp_handler(self, context, error):

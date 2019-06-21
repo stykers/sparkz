@@ -5,3 +5,4 @@ timeago
 yarl<1.2
 pytz
 pymysql
+gitpython
