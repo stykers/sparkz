@@ -243,7 +243,10 @@ class Staff(commands.Cog):
         repo = Repo('.')
         git = repo.git
         result = git.pull()
-        await context.send(result)
+        await message.edit(content=f"```fix\n{result}\n```")
+        if result != "Already up-to-date.":
+            context.send("Updated, please inspect the logs.\nRestarting...")
+            self.bot.close()
 
     @commands.command()
     @commands.check(repository.is_master)
