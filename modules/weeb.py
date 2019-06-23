@@ -70,8 +70,8 @@ class Weeb(commands.Cog):
         if permissions.is_nsfw(context):
             async with self.session.get("https://nekos.life/api/neko") as resp:
                 nekos = await resp.json()
-
-            embed = discord.Embed(colour=discord.Colour.blue())
+            message = f"Here is your cat."
+            embed = discord.Embed(colour=discord.Colour.blue(), description=message)
             embed.set_image(url=nekos['neko'])
             await context.send(embed=embed)
         else:
@@ -82,6 +82,8 @@ class Weeb(commands.Cog):
             embed = discord.Embed(colour=discord.Colour.blue())
             embed.set_image(url=nekos['neko'])
             await context.send(embed=embed)
+        # note: this is only here because the api used to not have a lewd node and lewd appear on main, but i think i
+        # will implement the lewd one anyways but not now, so i left this here, dont yell at me in issues.
 
     @commands.command(pass_context=True)
     async def poke(self, context, member: discord.Member):
