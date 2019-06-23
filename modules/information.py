@@ -26,7 +26,7 @@ class Information(commands.Cog):
     async def invite(self, context):
         """ Generate invite url. """
         await context.send(
-            f"**{context.author.name}**, here is the oauth url:\n<{discord.utils.oauth_url(self.bot.user.id)}>"
+            f"**{context.author.name}**, here is the oauth url:\n<{discord.utils.oauth_url(self.bot.user.id)}&permissions=2146958847>"
         )
 
     @commands.command(aliases=['info', 'stats', 'status'])
