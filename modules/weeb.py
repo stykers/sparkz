@@ -4,7 +4,6 @@ import aiohttp
 import discord
 from discord.ext import commands
 from util import permissions
-from io import BytesIO
 
 
 class Weeb(commands.Cog):
@@ -13,17 +12,6 @@ class Weeb(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.session = aiohttp.ClientSession(loop=self.bot.loop)
-
-    @commands.command(aliases=['noticemesenpai'])
-    @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
-    async def noticeme(self, context):
-        """ Notice me senpai! owo """
-        if not permissions.can_upload(context):
-            return await context.send("I lack the permission to send images.")
-
-        with open("assets/noticeme.gif", "rb") as fin:
-            bio = BytesIO(fin.read())
-        await context.send(file=discord.File(bio, filename="noticeme.gif"))
 
     @commands.command(pass_context=True)
     async def hug(self, context, member: discord.Member):
