@@ -240,18 +240,10 @@ class Staff(commands.Cog):
     async def update(self, context):
         """ Updates the bot from the git repository. """
         message = await context.send(f"Please wait...")
-        proc = await asyncio.create_subprocess_shell("./git-2.22.0/bin-wrappers/git pull", stdin=None, stderr=PIPE, stdout=PIPE)
-        out = (await proc.stdout.read()).decode('utf-8').strip()
-        err = (await proc.stderr.read()).decode('utf-8').strip()
-
-        if err:
-            await message.edit(content=f"```fix\n{err}\n```")
-            await context.send("Update successful, restarting.")
-            await self.bot.close()
-        if out == "Already up to date.":
-            await message.edit(content="Already up to date.")
-        else:
-            await message.edit(content=f"Something unexpected happened, please report this if you think it's a bug.")
+        repo = Repo('.')
+        git = repo.git
+        result = git.pull()
+        await message.edit(result)
 
     @commands.command()
     @commands.check(repository.is_master)
