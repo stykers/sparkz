@@ -66,11 +66,11 @@ class Weeb(commands.Cog):
     @commands.command(pass_context=True, no_pm=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, context):
-        """Nekos! \\o/ Warning: Some lewd nekos exist o_o"""
+        """Nekos! \\o/ Tip: use this command in NSFW channel to get *those* images"""
         if permissions.is_nsfw(context):
-            async with self.session.get("https://nekos.life/api/neko") as resp:
+            async with self.session.get("https://nekos.life/api/lewd/neko") as resp:
                 nekos = await resp.json()
-            message = f"Here is your cat."
+            message = f"Here is your lewd cat."
             embed = discord.Embed(colour=discord.Colour.blue(), description=message)
             embed.set_image(url=nekos['neko'])
             await context.send(embed=embed)
@@ -78,12 +78,10 @@ class Weeb(commands.Cog):
             # await context.send(f"You can only use this command in an NSFW channel.")
             async with self.session.get("https://nekos.life/api/neko") as resp:
                 nekos = await resp.json()
-
-            embed = discord.Embed(colour=discord.Colour.blue())
+            message = f"Here is your cat."
+            embed = discord.Embed(colour=discord.Colour.blue(), description=message)
             embed.set_image(url=nekos['neko'])
             await context.send(embed=embed)
-        # note: this is only here because the api used to not have a lewd node and lewd appear on main, but i think i
-        # will implement the lewd one anyways but not now, so i left this here, dont yell at me in issues.
 
     @commands.command(pass_context=True)
     async def poke(self, context, member: discord.Member):
