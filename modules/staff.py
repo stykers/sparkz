@@ -243,7 +243,7 @@ class Staff(commands.Cog):
         repo = Repo('.')
         git = repo.git
         result = git.pull()
-        await message.edit(result)
+        await context.send(result)
 
     @commands.command()
     @commands.check(repository.is_master)
