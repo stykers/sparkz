@@ -63,7 +63,7 @@ class Weeb(commands.Cog):
 
         await context.send(embed=embed)
 
-    @commands.command(pass_context=True, no_pm=True)
+    @commands.command(pass_context=True, no_pm=True, aliases=['cat'])
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def neko(self, context):
         """Nekos! \\o/ Warning: It behaves differently if executed in NSFW channel."""
