@@ -7,7 +7,8 @@ import os
 from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands import errors
-
+from util import repository
+from util import writer
 from util import essential
 
 
@@ -84,12 +85,17 @@ class Events(commands.Cog):
                                        status=discord.Status.online)
 
     @commands.command()
+    @commands.check(repository.is_master)
     async def debug(self, context):
-        """ Query if the bot is running in debug mode or not. """
+        """ Sets bot debug mode """
         if self.config.debug is True:
-            await context.send("I am running in Debug mode.")
+            writer.change_value("config.json", "debug", False)
+            await context.send("Switching to Production mode...")
+            await self.bot.close()
         else:
-            await context.send("I am running in Production mode.")
+            writer.change_value("config.json", "debug", True)
+            await context.send("Switching to Debug mode...")
+            await self.bot.close()
 
 
 def setup(bot):
