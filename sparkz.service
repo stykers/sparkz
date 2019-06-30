@@ -1,0 +1,13 @@
+[Unit]
+Description=Sparkz discord bot
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=Stykers
+WorkingDirectory=/var/lib/sparkz
+ExecStart=/bin/bash -c 'source venv/bin/activate; ./start.sh'
+Restart=on-failure
