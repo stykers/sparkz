@@ -1,7 +1,7 @@
 from util import essential
 
 masters = essential.get("config.json").masters
-version = "1.0.0-ALPHA"
+version = "1.0.0"
 
 
 def is_master(context):
