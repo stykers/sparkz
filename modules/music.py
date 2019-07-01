@@ -8,10 +8,11 @@ import logging
 from discord.ext import commands
 from util import list
 from util import music
+from util import essential
 
 
 useaira = 0
-logvids = False
+volume = 0.5
 skipsreq = 3
 ffbefopts = '-nostdin'
 ffopts = '-vn -reconnect 1'
@@ -88,6 +89,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.voice_status = {}
+        self.config = essential.get("config.json")
 
     def get_voice_state(self, guild):
         state = self.voice_status.get(guild.id)
@@ -131,7 +133,7 @@ class Music(commands.Cog):
         try:
             summoned_channel = ctx.author.voice.channel
         except AttributeError:
-            await ctx.send('Your are not in a voice channel!')
+            await ctx.send('You need to be in a voice channel to summon me!')
             await trydel(ctx)
             return False
 
@@ -142,9 +144,99 @@ class Music(commands.Cog):
         else:
             await state.voice.move_to(summoned_channel)
             await ctx.send(f"I have been relocated to `#{summoned_channel}` Channel.")
-
         return True
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def play(self, context, *, url: str):
+        """ Plays a song from a site. """
+        state = self.get_voice_state(context.message.guild)
+        aria = useaira
+        if state.voice is None:
+            success = await context.invoke(self.summon)
+            if not success:
+                return
+        if 'playlist?list=' in url:
+            await context.send("Passing playlist to daemon... **NOTE: This might take a while!**")
+            await self.playlist(context, url)
+            return
+        try:
+            if state.voice.is_playing():
+                getinfo = music.exinfo(url, playlist=False)
+                print(getinfo)
+                if 'entries' in getinfo:
+                    FYI = 1
+                    getinfo = getinfo['entries'][0]
+                    url = getinfo['webpage_url']
+                else:
+                    FYI = 0
+                await context.send(f"Added **{getinfo['title']}**")
+                await trydel(context)
+                await state.songs.put(url)
+                return
+        except AttributeError:
+            print("Attribute error!")
+            pass
+        await trydel(context)
+        message = await context.send("Processing video...")
+        if context.voice_client is not None:
+            getinfo = music.exinfo(url, playlist=False)
+            print(getinfo)
+            if 'entries' in getinfo:
+                FYI = 1
+                getinfo = getinfo['entries'][0]
+                url = getinfo['webpage_url']
+            else:
+                FYI = 0
+            durationsecs = getinfo['duration']
+            if durationsecs >= 3600 and self.config.lonvids is False:
+                return await context.send('This video is over an hour, which is disallowed in the current configuration.')
+            if int(aria) == 1:
+                state.current = await YTDLSource.from_url(url, loop=self.bot.loop, aria=True)
+            else:
+                state.current = await YTDLSource.from_url(url, loop=self.bot.loop)
+            source = discord.PCMVolumeTransformer(state.current)
+            source.volume = volume
+            state.current.player = source
+            state.requester = str(context.message.author.name)
+            await trydel(message)
+            m, s = divmod(getinfo['duration'], 60)
+            title, vc, avrate = getinfo['title'], getinfo['view_count'], round(getinfo['average_rating'])
+            link = getinfo['webpage_url']
+            uploader = getinfo['uploader']
+            embed = discord.Embed(title='Now Playing', color=0x43B581)
+            desclist = [f"Title: {str(title)}\n", f"Length: **{m}m{s}s**\n", f"Views: {str(vc)}\n",
+                        f"Average Ratings: {str(avrate)}\n", f"Link: {str(link)}\n", f"Uploaded By: {str(uploader)}\n"]
+            if FYI == 1:
+                desclist.append("Note: This video is part of a playlist.")
+            embed.description = ''.join(desclist)
+            embed.set_thumbnail(url=getinfo['thumbnail'])
+            await context.send(embed=embed)
+            context.voice_client.play(source, after=lambda e: self.nextsongandlog(context))
+        else:
+            await context.send("I am currently not connected to any channel.")
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def volume(self, context, value=None):
+        """ Configure the volue of current song. """
+        state = self.get_voice_state(context.message.guild)
+        player = state.player
+        try:
+            value = int(value)
+        except ValueError:
+            return await context.send("""Unable to set volume!""")
+        except TypeError:
+            pass
+        if value is None:
+            await context.send(f'Current Volume: {player.volume:.0%}')
+        else:
+            global volume
+            if state.voice.is_playing():
+                player.volume = value / 100
+                volume = float(player.volume)
+                await context.send(f'Set the volume to {player.volume:.0%}')
+            else:
+                volume = float(player.volume)
+                await context.send(f'Set the volume to {player.volume:.0%} for the next song.')
 
 def setup(bot):
     bot.add_cog(Music(bot))

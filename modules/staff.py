@@ -122,6 +122,16 @@ class Staff(commands.Cog):
             for page in _help:
                 await context.send(page)
 
+    @config.command(name="longvids")
+    @commands.check(repository.is_master)
+    async def play(self, context, *, longvids: bool):
+        """ Allow long video or not. """
+        try:
+            writer.change_value("config.json", "longvids", longvids)
+            await context.send(f"Long video is now set to **{longvids}**.")
+        except Exception as e:
+            await context.send(e)
+
     @config.command(name="play")
     @commands.check(repository.is_master)
     async def play(self, context, *, playing: str):
