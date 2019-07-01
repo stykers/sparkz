@@ -15,7 +15,7 @@ logvids = False
 skipsreq = 3
 ffbefopts = '-nostdin'
 ffopts = '-vn -reconnect 1'
-ytdl_npm = youtube_dl.YoutubeDL(list.ytdl_noplaylist)
+ytdl_npl = youtube_dl.YoutubeDL(list.ytdl_noplaylist)
 ytdl = youtube_dl.YoutubeDL(list.ytdl_format_options)
 ytdl_aria = youtube_dl.YoutubeDL(list.ytdl_aria)
 
@@ -48,6 +48,18 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         self.title = data.get('title')
         self.url = data.get('url')
+
+    @classmethod
+    async def from_url(cls, url, *, loop=None, aria=False):
+        loop = loop or asyncio.get_event_loop()
+        if aria:
+            data = await loop.run_in_executor(None, ytdl_aria.extract_info, url)
+        else:
+            data = await loop.run_in_executor(None, ytdl_npl.extract_info, url)
+        if 'entries' in data:
+            data = data['entries'][0]
+        filename = (ytdl_npl.prepare_filename(data))
+        return cls(discord.FFmpegPCMAudio(filename, before_options=ffbefopts, options=ffopts), data=data)
 
 
 class Music(commands.Cog):
