@@ -12,7 +12,6 @@ from util import essential
 
 
 useaira = 0
-volume = 0.5
 skipsreq = 3
 ffbefopts = '-nostdin'
 ffopts = '-vn -reconnect 1'
@@ -42,11 +41,10 @@ async def trydel(context, quiet=True):
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
+    # noinspection PyShadowingNames
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
-
         self.data = data
-
         self.title = data.get('title')
         self.url = data.get('url')
 
@@ -90,6 +88,7 @@ class Music(commands.Cog):
         self.bot = bot
         self.voice_status = {}
         self.config = essential.get("config.json")
+        self.nextsongandlog = None
 
     def get_voice_state(self, guild):
         state = self.voice_status.get(guild.id)
@@ -146,6 +145,7 @@ class Music(commands.Cog):
             await ctx.send(f"I have been relocated to `#{summoned_channel}` Channel.")
         return True
 
+    # noinspection PyUnusedLocal
     @commands.command(pass_context=True, no_pm=True)
     async def play(self, context, *, url: str):
         """ Plays a song from a site. """
@@ -188,7 +188,7 @@ class Music(commands.Cog):
             else:
                 FYI = 0
             durationsecs = getinfo['duration']
-            if durationsecs >= 3600 and self.config.lonvids is False:
+            if durationsecs >= 3600 and self.config.longvids is False:
                 return await context.send('This video is over an hour, which is disallowed in the current configuration.')
             if int(aria) == 1:
                 state.current = await YTDLSource.from_url(url, loop=self.bot.loop, aria=True)
@@ -217,7 +217,7 @@ class Music(commands.Cog):
 
     @commands.command(pass_context=True, no_pm=True)
     async def volume(self, context, value=None):
-        """ Configure the volue of current song. """
+        """ Configure the volume of current song. """
         state = self.get_voice_state(context.message.guild)
         player = state.player
         try:
@@ -237,6 +237,41 @@ class Music(commands.Cog):
             else:
                 volume = float(player.volume)
                 await context.send(f'Set the volume to {player.volume:.0%} for the next song.')
+
+    async def getnextsong(self, context):
+        state = self.get_voice_state(context.message.guild)
+        if context.voice_client is None:
+            return
+        try:
+            songurl = state.songs.get_nowait()
+        except asyncio.QueueEmpty:
+            return
+        getinfo = music.exinfo(songurl, playlist=False)
+        if getinfo is None:
+            return await self.getnextsong(context)
+        durationsecs = getinfo['duration']
+        if durationsecs >= 3600 and self.config.longvids is False:
+            await self.getnextsong(context)
+            return await context.send('This video is over an hour, which is disallowed in the current configuration.')
+        if useaira == 1:
+            state.current = await YTDLSource.from_url(songurl, loop=self.bot.loop, aria=True)
+        else:
+            state.current = await YTDLSource.from_url(songurl, loop=self.bot.loop)
+        source = discord.PCMVolumeTransformer(state.current)
+        source.volume = volume
+        state.current.player = source
+        m, s = divmod(getinfo['duration'], 60)
+        title, vc, avrate = getinfo['title'], getinfo['view_count'], round(getinfo['average_rating'])
+        link = getinfo['webpage_url']
+        uploader = getinfo['uploader']
+        embed = discord.Embed(title='Now Playing', color=0x43B581)
+        desclist = [f"Title: {title}\n", f"Length: **{m}m{s}s**\n", f"Views: {vc}\n", f"Average Ratings: {avrate}\n",
+                    f"Link: {link}\n", f"Uploaded By: {uploader}\n"]
+        embed.description = ''.join(desclist)
+        embed.set_thumbnail(url=getinfo['thumbnail'])
+        await context.send(embed=embed)
+        context.voice_client.play(source, after=lambda e: self.nextsongandlog(context))
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
