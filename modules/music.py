@@ -1,13 +1,23 @@
 import discord
 import asyncio
-import subprocess
-import re
-import shlex
 import os
-import time
-import psutil
+import youtube_dl
+import glob
+import logging
 
 from discord.ext import commands
+from util import list
+from util import music
+
+
+useaira = 0
+logvids = False
+skipsreq = 3
+ffbefopts = '-nostdin'
+ffopts = '-vn -reconnect 1'
+ytdl_npm = youtube_dl.YoutubeDL(list.ytdl_noplaylist)
+ytdl = youtube_dl.YoutubeDL(list.ytdl_format_options)
+ytdl_aria = youtube_dl.YoutubeDL(list.ytdl_aria)
 
 
 class Music(commands.Cog):
