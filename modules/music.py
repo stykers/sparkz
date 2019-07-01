@@ -298,7 +298,7 @@ class Music(commands.Cog):
         try:
             del self.voice_status[guild.id]
             await state.voice.disconnect()
-            await context.send(f"Disconnected From #{state.voice.channel.name}.")
+            await context.send(f"Disconnected From `#{state.voice.channel.name}``.")
         except Exception as e:
             print(e)
             pass
