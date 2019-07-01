@@ -193,7 +193,7 @@ class Music(commands.Cog):
             else:
                 state.current = await YTDLSource.from_url(url, loop=self.bot.loop)
             source = discord.PCMVolumeTransformer(state.current)
-            source.volume = volume
+            # source.volume = volume
             state.current.player = source
             state.requester = str(context.message.author.name)
             await trydel(message)
@@ -256,7 +256,7 @@ class Music(commands.Cog):
         else:
             state.current = await YTDLSource.from_url(songurl, loop=self.bot.loop)
         source = discord.PCMVolumeTransformer(state.current)
-        source.volume = volume
+        # source.volume = volume
         state.current.player = source
         m, s = divmod(getinfo['duration'], 60)
         title, vc, avrate = getinfo['title'], getinfo['view_count'], round(getinfo['average_rating'])
