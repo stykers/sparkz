@@ -7,3 +7,4 @@ pytz
 pymysql
 gitpython
 youtube_dl
+pynacl
