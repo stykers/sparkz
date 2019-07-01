@@ -2,7 +2,7 @@ import random
 import secrets
 
 from discord.ext import commands
-from util import list
+from util import lists
 
 
 class Fun(commands.Cog):
@@ -13,7 +13,7 @@ class Fun(commands.Cog):
     @commands.command(aliases=['8ball'])
     async def eightball(self, context, *, question: commands.clean_content):
         """ Consult 8ball to receive an answer """
-        answer = random.choice(list.ballresponse)
+        answer = random.choice(lists.ballresponse)
         await context.send(f"🎱 **Question:** {question}\n**Answer:** {answer}")
 
     @commands.command(aliases=['flip', 'coin'])

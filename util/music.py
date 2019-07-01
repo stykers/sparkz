@@ -1,10 +1,10 @@
 from youtube_dl import YoutubeDL
-from util import list
+from util import lists
 
 
-ytdl_npl = YoutubeDL(list.ytdl_noplaylist)
-ytdl = YoutubeDL(list.ytdl_format_options)
-ytdl_aria = YoutubeDL(list.ytdl_aria)
+ytdl_npl = YoutubeDL(lists.ytdl_noplaylist)
+ytdl = YoutubeDL(lists.ytdl_format_options)
+ytdl_aria = YoutubeDL(lists.ytdl_aria)
 
 
 def exinfo(url, playlist=False):

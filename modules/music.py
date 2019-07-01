@@ -3,10 +3,9 @@ import asyncio
 import os
 import youtube_dl
 import glob
-import logging
 
 from discord.ext import commands
-from util import list
+from util import lists
 from util import music
 from util import essential
 
@@ -15,9 +14,9 @@ useaira = 0
 skipsreq = 3
 ffbefopts = '-nostdin'
 ffopts = '-vn -reconnect 1'
-ytdl_npl = youtube_dl.YoutubeDL(list.ytdl_noplaylist)
-ytdl = youtube_dl.YoutubeDL(list.ytdl_format_options)
-ytdl_aria = youtube_dl.YoutubeDL(list.ytdl_aria)
+ytdl_npl = youtube_dl.YoutubeDL(lists.ytdl_noplaylist)
+ytdl = youtube_dl.YoutubeDL(lists.ytdl_format_options)
+ytdl_aria = youtube_dl.YoutubeDL(lists.ytdl_aria)
 
 
 async def trydel(context, quiet=True):
@@ -88,7 +87,6 @@ class Music(commands.Cog):
         self.bot = bot
         self.voice_status = {}
         self.config = essential.get("config.json")
-        self.nextsongandlog = None
 
     def get_voice_state(self, guild):
         state = self.voice_status.get(guild.id)
@@ -307,6 +305,87 @@ class Music(commands.Cog):
                 os.remove(file)
             except PermissionError:
                 pass
+
+    def nextsongandlog(self, ctx):
+        print("next song")
+        coro = self.getnextsong(ctx)
+        fut = asyncio.run_coroutine_threadsafe(coro, self.bot.loop)
+        try:
+            result = fut.result()
+            print(result)
+        except Exception as e:
+            print(e)
+            pass
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def skip(self, context):
+        """ A skip vote, 3 votes will make the song skip. """
+        state = self.get_voice_state(context.message.guild)
+        if not state.voice.is_playing():
+            await context.send('I am not playing any music...')
+            return
+        voter = context.message.author
+        if voter.name == state.requester:
+            await context.send('Requester requested to skip song. skipping now...')
+            state.skip_votes.clear()
+            if state.voice.is_playing():
+                state.voice.stop()
+                await self.getnextsong(context)
+        elif (context.message.channel.permissions_for(context.message.author)).move_members:
+            await context.send(f'{context.message.author.name} forced a skip. Skipping...')
+            state.skip_votes.clear()
+            if state.voice.is_playing():
+                state.voice.stop()
+                await self.getnextsong(context)
+        elif voter.id not in state.skip_votes:
+            state.skip_votes.add(voter.id)
+            total_votes = len(state.skip_votes)
+            if total_votes >= skipsreq:
+                votemessage = await context.say('Skipping song...')
+                await asyncio.sleep(1)
+                await trydel(votemessage)
+                state.skip_votes.clear()
+                if state.voice.is_playing():
+                    state.voice.stop()
+                    await self.getnextsong(context)
+            else:
+                await context.send(f'Skip vote added, currently at [{total_votes}/{skipsreq}]')
+        else:
+            await context.send(f'You have already voted to skip this song.')
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def queue(self, context):
+        """ Shows info about the queue. """
+        state = self.get_voice_state(context.message.guild)
+        skip_count = len(state.skip_votes)
+        queue = []
+        dembed = discord.Embed(title="Playlist:", color=0x7289DA)
+        try:
+            if state.current is None:
+                dembed.add_field(name="Currently playing:", value="Nothing.")
+                return await context.send(embed=dembed)
+            lst = list(state.songs._queue)
+            for x in lst[:5]:
+                info = music.exinfo(x)
+                m, s = divmod(info['duration'], 60)
+                y = f"""Title: **{info['title']}**\nLength: **{m}m{s}s**\n"""
+                queue.append(y)
+            if len(lst) > 5:
+                queue.append("{} More Not listed.".format(str(len(lst) - 5)))
+
+            fqueue = ''.join(queue)
+            cm, cs = divmod(state.current.data['duration'], 60)
+            dembed.add_field(name='Currently playing:',
+                             value='Title: **{}**\nLength: **{}m{}s**\n[skips: {}/3]'.format(
+                                 state.current.data['title'],
+                                 cm, cs, skip_count))
+            if not fqueue == '':
+                dembed.add_field(name='Up Next:', value=fqueue)
+            else:
+                pass
+            await context.send(embed=dembed)
+        except AttributeError:
+            print("Attribute error!")
 
 
 def setup(bot):
