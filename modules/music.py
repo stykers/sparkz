@@ -40,6 +40,16 @@ async def trydel(context, quiet=True):
             print(f"Attribute error! Please report this in an issue.")
 
 
+ class YTDLSource(discord.PCMVolumeTransformer):
+    def __init__(self, source, *, data, volume=0.5):
+        super().__init__(source, volume)
+
+        self.data = data
+
+        self.title = data.get('title')
+        self.url = data.get('url')
+
+
 class Music(commands.Cog):
     """ Music related features. """
 
