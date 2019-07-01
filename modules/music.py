@@ -83,10 +83,18 @@ class VoiceState:
 
 
 class Music(commands.Cog):
-    """ Music related features. """
+    """ Music related stuff. """
 
     def __init__(self, bot):
         self.bot = bot
+        self.voice_status = {}
+
+    def get_voice_state(self, guild):
+        state = self.voice_status.get(guild.id)
+        if state is None:
+            state = VoiceState(self.bot)
+            self.voice_status[guild.id] = state
+        return state
 
 
 def setup(bot):
