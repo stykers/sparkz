@@ -272,6 +272,42 @@ class Music(commands.Cog):
         await context.send(embed=embed)
         context.voice_client.play(source, after=lambda e: self.nextsongandlog(context))
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def pause(self, context):
+        """ Pause/resume the currently playing song. """
+        state = self.get_voice_state(context.message.guild)
+        if state.voice.is_paused():
+            context.send("Paused current music.")
+            state.voice.resume()
+        else:
+            context.send("Resumed current music.")
+            state.voice.pause()
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def disconnect(self, context):
+        """ Stops playing audio and leaves the voice channel. This also clears the queue. """
+        guild = context.message.guild
+        state = self.get_voice_state(context.message.guild)
+        state.current = None
+        if state.is_playing():
+            player = state.player
+            try:
+                player.stop()
+            except AttributeError:
+                pass
+        try:
+            del self.voice_status[guild.id]
+            await state.voice.disconnect()
+            await context.send(f"Disconnected From #{state.voice.channel.name}.")
+        except Exception as e:
+            print(e)
+            pass
+        for file in glob.glob('youtube-*.*'):
+            try:
+                os.remove(file)
+            except PermissionError:
+                pass
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
