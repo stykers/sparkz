@@ -20,6 +20,26 @@ ytdl = youtube_dl.YoutubeDL(list.ytdl_format_options)
 ytdl_aria = youtube_dl.YoutubeDL(list.ytdl_aria)
 
 
+async def trydel(context, quiet=True):
+    try:
+        await context.delete()
+    except discord.Forbidden:
+        if quiet:
+            await context.send("I lack the permission to delete messages.")
+        else:
+            pass
+    except AttributeError:
+        try:
+            await context.message.delete()
+        except discord.Forbidden:
+            if quiet:
+                await context.send("I lack the permission to delete messages.")
+            else:
+                pass
+        except AttributeError:
+            print(f"Attribute error! Please report this in an issue.")
+
+
 class Music(commands.Cog):
     """ Music related features. """
 
