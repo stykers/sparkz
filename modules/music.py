@@ -40,7 +40,7 @@ async def trydel(context, quiet=True):
             print(f"Attribute error! Please report this in an issue.")
 
 
- class YTDLSource(discord.PCMVolumeTransformer):
+class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
 
