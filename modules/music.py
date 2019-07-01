@@ -138,10 +138,10 @@ class Music(commands.Cog):
         state = self.get_voice_state(ctx.message.guild)
         if state.voice is None:
             state.voice = await summoned_channel.connect()
-            await ctx.send(f"I have been summoned to #{summoned_channel} Channel.")
+            await ctx.send(f"I have been summoned to `#{summoned_channel}` Channel.")
         else:
             await state.voice.move_to(summoned_channel)
-            await ctx.send(f"I have been relocated to #{summoned_channel} Channel.")
+            await ctx.send(f"I have been relocated to `#{summoned_channel}` Channel.")
 
         return True
 
