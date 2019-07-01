@@ -8,3 +8,4 @@ pymysql
 gitpython
 youtube_dl
 pynacl
+ffmpeg
