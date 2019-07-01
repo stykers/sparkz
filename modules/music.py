@@ -62,6 +62,26 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, before_options=ffbefopts, options=ffopts), data=data)
 
 
+class VoiceState:
+    def __init__(self, bot):
+        self.current = None
+        self.requester = None
+        self.voice = None
+        self.bot = bot
+        self.play_next_song = asyncio.Event()
+        self.songs = asyncio.Queue()
+        self.skip_votes = set()
+
+    def is_playing(self):
+        if self.voice is None or self.current is None:
+            return False
+        return not self.voice.is_playing()
+
+    @property
+    def player(self):
+        return self.current.player
+
+
 class Music(commands.Cog):
     """ Music related features. """
 
