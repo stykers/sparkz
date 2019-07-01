@@ -96,6 +96,55 @@ class Music(commands.Cog):
             self.voice_status[guild.id] = state
         return state
 
+    async def create_voice_bot(self, channel):
+        voice = await channel.connect()
+        state = self.get_voice_state(channel.guild)
+        state.voice = voice
+
+    def __unload(self):
+        for state in self.voice_status.values():
+            try:
+                state.audio_player.cancel()
+                if state.voice:
+                    self.bot.loop.create_task(state.voice.disconnect())
+            except:
+                pass
+
+    async def playlist(self, context, url):
+        state = self.get_voice_state(context.message.guild)
+        getinfo = music.exinfo(url, playlist=True)
+        for x in getinfo['entries']:
+            print(x)
+            try:
+                await state.songs.put(x['webpage_url'])
+            except TypeError:
+                pass
+            except KeyError:
+                await state.songs.put(f"https://www.youtube.com/watch?v={x['url']}")
+        if state.voice.is_playing():
+            pass
+        else:
+            await self.getnextsong(context)
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def summon(self, ctx):
+        try:
+            summoned_channel = ctx.author.voice.channel
+        except AttributeError:
+            await ctx.send('Your are not in a voice channel!')
+            await trydel(ctx)
+            return False
+
+        state = self.get_voice_state(ctx.message.guild)
+        if state.voice is None:
+            state.voice = await summoned_channel.connect()
+            await ctx.send(f"I have been summoned to #{summoned_channel} Channel.")
+        else:
+            await state.voice.move_to(summoned_channel)
+            await ctx.send(f"I have been relocated to #{summoned_channel} Channel.")
+
+        return True
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
