@@ -147,7 +147,7 @@ class Music(commands.Cog):
     # noinspection PyUnusedLocal
     @commands.command(pass_context=True, no_pm=True)
     async def play(self, context, *, url: str):
-        """ Plays a song from a site. """
+        """ Plays song from URL. If a title is provided it will search for it. """
         state = self.get_voice_state(context.message.guild)
         aria = useaira
         if state.voice is None:
