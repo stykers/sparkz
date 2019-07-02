@@ -127,6 +127,7 @@ class Music(commands.Cog):
 
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
+        """ Summons sparkz to your channel. """
         try:
             summoned_channel = ctx.author.voice.channel
         except AttributeError:
